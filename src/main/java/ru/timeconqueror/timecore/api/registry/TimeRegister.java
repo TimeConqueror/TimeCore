@@ -1,5 +1,6 @@
 package ru.timeconqueror.timecore.api.registry;
 
+import lombok.extern.log4j.Log4j2;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
@@ -15,6 +16,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 //TODO auto unreg
+@Log4j2
 public abstract class TimeRegister {
     private final String modId;
     protected final Features modFeatures;
@@ -71,7 +73,7 @@ public abstract class TimeRegister {
             runnable.run();
         } catch (Throwable e) {
             String culpritInfo = getOwner() != null ? "Currently handling stuff from class: " + getOwner().getName() : "Unknown owner";
-            storeException(new RuntimeException("Caught exception during " + action + ". " + culpritInfo, e));
+            storeAndLogException(new RuntimeException("Caught exception during " + action + ". " + culpritInfo, e));
         }
     }
 
@@ -82,11 +84,12 @@ public abstract class TimeRegister {
             String culpritInfo = getOwner() != null ? "Currently handling stuff from class: " + getOwner().getName() + "." : "Unknown owner.";
             String extra = "Extra Info:\n" + extraInfo.get().stream().map(pair ->pair.left() + ": " + pair.right() + "\n").collect(Collectors.joining());
             RuntimeException exception = new RuntimeException("Caught exception during " + action + ". \n" + culpritInfo + "\n" + extra, e);
-            storeException(exception);
+            storeAndLogException(exception);
         }
     }
 
-    protected void storeException(RuntimeException exception) {
+    protected void storeAndLogException(RuntimeException exception) {
+        log.error("Exception in TimeRegister", exception);
         error.compareAndSet(null, exception);
     }
 }
