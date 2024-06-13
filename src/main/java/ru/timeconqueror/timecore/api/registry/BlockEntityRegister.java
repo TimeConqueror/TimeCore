@@ -49,8 +49,8 @@ import java.util.function.Supplier;
  *         {@literal @}AutoRegistrable
  *          private static final BlockEntityRegister REGISTER = new BlockEntityRegister(TimeCore.MODID);
  *
- *          public static RegistryObject<BlockEntityType<DummyTileEntity>> TEST_TE_TYPE = REGISTER.register("test_tile", DummyTileEntity::new, BlockRegistryExample.TEST_BLOCK_WITH_TILE)
- *              .regCustomRenderer(() -> DummyTileEntityRenderer::new) // <- one of extra features
+ *          public static RegistryObject<BlockEntityType<DummyBlockEntity>> TEST_TE_TYPE = REGISTER.register("test_block_entity", DummyBlockEntity::new, BlockRegistryExample.TEST_BLOCK_WITH_ENTITY)
+ *              .regCustomRenderer(() -> DummyBlockEntityRenderer::new) // <- one of extra features
  *              .asRegistryObject(); // <- retrieving registry object from our register chain.
  *      }
  *     </pre>
@@ -117,8 +117,8 @@ public class BlockEntityRegister extends VanillaRegister<BlockEntityType<?>> {
      * All method of {@link BlockEntityRegisterChain} are optional.
      *
      * @param name              The block type's name, will automatically have the modid as a namespace.
-     * @param blockEntityFactory A factory for the new tile, it should return a new instance every time it is called.
-     * @param validBlock        block, which can have this tile type.
+     * @param blockEntityFactory A factory for the new block entity, it should return a new instance every time it is called.
+     * @param validBlock        block, which can have entity type.
      * @return A {@link BlockEntityRegisterChain} for adding some extra stuff.
      * @see BlockEntityRegisterChain
      */
@@ -132,15 +132,15 @@ public class BlockEntityRegister extends VanillaRegister<BlockEntityType<?>> {
      * This method also returns {@link BlockEntityRegisterChain} to provide extra methods, which you can apply to entry being registered.
      * All methods of {@link BlockEntityRegisterChain} are optional.
      *
-     * @param name              The tile type's name, will automatically have the modid as a namespace.
-     * @param tileEntityFactory A factory for the new tile, it should return a new instance every time it is called.
-     * @param validBlocks       blocks, which can have this tile type.
+     * @param name              The block entity type's name, will automatically have the modid as a namespace.
+     * @param blockEntityFactory A factory for the new block entity, it should return a new instance every time it is called.
+     * @param validBlocks       blocks, which can have this entity type.
      * @return A {@link BlockEntityRegisterChain} for adding some extra stuff.
      * @see BlockEntityRegisterChain
      */
-    public <T extends BlockEntity> BlockEntityRegisterChain<T> register(String name, BlockEntityType.BlockEntitySupplier<T> tileEntityFactory, Supplier<List<Block>> validBlocks) {
+    public <T extends BlockEntity> BlockEntityRegisterChain<T> register(String name, BlockEntityType.BlockEntitySupplier<T> blockEntityFactory, Supplier<List<Block>> validBlocks) {
         Supplier<BlockEntityType<T>> typeSupplier = () ->
-                BlockEntityType.Builder.of(tileEntityFactory, validBlocks.get().toArray(new Block[0]))
+                BlockEntityType.Builder.of(blockEntityFactory, validBlocks.get().toArray(new Block[0]))
                         .build(null /*forge doesn't have support for it*/);
 
         Promised<BlockEntityType<T>> holder = registerEntry(name, typeSupplier);
