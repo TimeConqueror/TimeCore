@@ -1,5 +1,6 @@
 package ru.timeconqueror.timecore.api.client.resource.location;
 
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockModelLocation extends ModelLocation {
@@ -9,6 +10,10 @@ public class BlockModelLocation extends ModelLocation {
      */
     public BlockModelLocation(String modid, String path) {
         super(modid, path);
+    }
+
+    public BlockModelLocation(ResourceLocation location) {
+        super(location);
     }
 
     @Override

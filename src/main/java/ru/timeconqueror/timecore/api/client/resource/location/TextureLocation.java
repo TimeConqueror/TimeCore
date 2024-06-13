@@ -1,5 +1,6 @@
 package ru.timeconqueror.timecore.api.client.resource.location;
 
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class TextureLocation extends AdaptiveLocation {
@@ -9,6 +10,10 @@ public class TextureLocation extends AdaptiveLocation {
      */
     public TextureLocation(String modid, String path) {
         super(modid, path);
+    }
+
+    public TextureLocation(ResourceLocation location) {
+        super(location);
     }
 
     @Override

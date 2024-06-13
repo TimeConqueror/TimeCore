@@ -16,6 +16,10 @@ public abstract class AdaptiveLocation {
         this.path = cutPath(path);
     }
 
+    public AdaptiveLocation(ResourceLocation location) {
+        this(location.getNamespace(), location.getPath());
+    }
+
     @NotNull
     abstract String getPrefix();
 

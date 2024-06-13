@@ -13,6 +13,10 @@ public abstract class ModelLocation extends AdaptiveLocation {
         super(modid, path);
     }
 
+    public ModelLocation(ResourceLocation location) {
+        super(location);
+    }
+
     public ResourceLocation fullLocation() {
         return new ResourceLocation(getNamespace(), getFullPath() + ".json");
     }
