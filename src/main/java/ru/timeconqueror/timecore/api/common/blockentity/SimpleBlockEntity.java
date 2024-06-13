@@ -1,4 +1,4 @@
-package ru.timeconqueror.timecore.api.common.tile;
+package ru.timeconqueror.timecore.api.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -9,11 +9,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.Objects;
 
 /**
- * Tile entity with some useful methods
+ * Block entity with some useful methods
  */
-public abstract class SimpleTile extends BlockEntity {
-    public SimpleTile(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
-        super(tileEntityTypeIn, pos, state);
+public abstract class SimpleBlockEntity extends BlockEntity {
+    public SimpleBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
+        super(blockEntityType, pos, state);
     }
 
     public boolean isServerSide() {
@@ -26,7 +26,7 @@ public abstract class SimpleTile extends BlockEntity {
     }
 
     /**
-     * Returns the blockstate on tileentity pos.
+     * Returns the blockstate on blockentity pos.
      */
     public BlockState getState() {
         Level level = Objects.requireNonNull(getLevel());

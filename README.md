@@ -10,7 +10,7 @@
   place them in resources now!
 * Porting...~~* Structure Revealer - Can be used for debug purposes, shows bounding box of the every subscribed
   structure piece.~~
-* Comfortable system for Block/Item/TileEntity/Packet/Config Registering - Provides a simple way of creating and
+* Comfortable system for Block/Item/BlockEntity/Packet/Config Registering - Provides a simple way of creating and
   registering all specified stuff.
 * Improved Config-Building System - More comfortable way of creating configs.
 * Safe Network System - No more exploits of sending packets to the wrong side.

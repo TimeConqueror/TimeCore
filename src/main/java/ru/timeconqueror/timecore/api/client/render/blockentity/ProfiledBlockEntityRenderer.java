@@ -1,14 +1,10 @@
-package ru.timeconqueror.timecore.api.client.render.tile;
+package ru.timeconqueror.timecore.api.client.render.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
@@ -19,10 +15,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.function.Function;
 
 @OnlyIn(Dist.CLIENT)
-public class ProfiledTileEntityRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
+public class ProfiledBlockEntityRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
     private final BlockEntityRenderer<? super T> delegate;
 
-    public ProfiledTileEntityRenderer(BlockEntityRendererProvider.Context ctx, Function<? super BlockEntityRendererProvider.Context, BlockEntityRenderer<? super T>> delegateProvider) {
+    public ProfiledBlockEntityRenderer(BlockEntityRendererProvider.Context ctx, Function<? super BlockEntityRendererProvider.Context, BlockEntityRenderer<? super T>> delegateProvider) {
         super();
 
         delegate = delegateProvider.apply(ctx);

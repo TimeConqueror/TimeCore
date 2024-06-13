@@ -8,7 +8,7 @@ import ru.timeconqueror.timecore.api.animation.Animation;
 import ru.timeconqueror.timecore.api.animation.AnimationAPI;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class TileAnimations {
+public class BlockEntityAnimations {
     public static Animation heatCubeIdle;
 
     @SubscribeEvent

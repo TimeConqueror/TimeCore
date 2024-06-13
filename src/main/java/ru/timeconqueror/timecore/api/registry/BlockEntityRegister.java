@@ -14,7 +14,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
 import net.minecraftforge.registries.RegistryObject;
 import ru.timeconqueror.timecore.api.TimeCoreAPI;
-import ru.timeconqueror.timecore.api.client.render.tile.ProfiledTileEntityRenderer;
+import ru.timeconqueror.timecore.api.client.render.blockentity.ProfiledBlockEntityRenderer;
 import ru.timeconqueror.timecore.api.registry.util.AutoRegistrable;
 import ru.timeconqueror.timecore.api.registry.util.Promised;
 import ru.timeconqueror.timecore.api.util.Hacks;
@@ -45,11 +45,11 @@ import java.util.function.Supplier;
  * <br>
  * <blockquote>
  *     <pre>
- *     public class TileEntityDeferredRegistryExample {
+ *     public class BlockEntityDeferredRegistryExample {
  *         {@literal @}AutoRegistrable
- *          private static final TileEntityRegister REGISTER = new TileEntityRegister(TimeCore.MODID);
+ *          private static final BlockEntityRegister REGISTER = new BlockEntityRegister(TimeCore.MODID);
  *
- *          public static RegistryObject<TileEntityType<DummyTileEntity>> TEST_TE_TYPE = REGISTER.register("test_tile", DummyTileEntity::new, BlockRegistryExample.TEST_BLOCK_WITH_TILE)
+ *          public static RegistryObject<BlockEntityType<DummyTileEntity>> TEST_TE_TYPE = REGISTER.register("test_tile", DummyTileEntity::new, BlockRegistryExample.TEST_BLOCK_WITH_TILE)
  *              .regCustomRenderer(() -> DummyTileEntityRenderer::new) // <- one of extra features
  *              .asRegistryObject(); // <- retrieving registry object from our register chain.
  *      }
@@ -105,63 +105,63 @@ import java.util.function.Supplier;
  * <p>
  * Examples can be seen at test module.
  */
-public class TileEntityRegister extends VanillaRegister<BlockEntityType<?>> {
-    public TileEntityRegister(String modid) {
+public class BlockEntityRegister extends VanillaRegister<BlockEntityType<?>> {
+    public BlockEntityRegister(String modid) {
         super(ForgeRegistries.BLOCK_ENTITY_TYPES, modid);
     }
 
     /**
      * Adds entry in provided {@code entrySup} to the queue, all entries from which will be registered later.
      * <p>
-     * This method also returns {@link TileEntityRegisterChain} to provide extra methods, which you can apply to entry being registered.
-     * All method of {@link TileEntityRegisterChain} are optional.
+     * This method also returns {@link BlockEntityRegisterChain} to provide extra methods, which you can apply to entry being registered.
+     * All method of {@link BlockEntityRegisterChain} are optional.
      *
-     * @param name              The tile type's name, will automatically have the modid as a namespace.
-     * @param tileEntityFactory A factory for the new tile, it should return a new instance every time it is called.
+     * @param name              The block type's name, will automatically have the modid as a namespace.
+     * @param blockEntityFactory A factory for the new tile, it should return a new instance every time it is called.
      * @param validBlock        block, which can have this tile type.
-     * @return A {@link TileEntityRegisterChain} for adding some extra stuff.
-     * @see TileEntityRegisterChain
+     * @return A {@link BlockEntityRegisterChain} for adding some extra stuff.
+     * @see BlockEntityRegisterChain
      */
-    public <T extends BlockEntity> TileEntityRegisterChain<T> registerSingleBound(String name, BlockEntityType.BlockEntitySupplier<T> tileEntityFactory, Supplier<Block> validBlock) {
-        return register(name, tileEntityFactory, () -> Lists.newArrayList(validBlock.get()));
+    public <T extends BlockEntity> BlockEntityRegisterChain<T> registerSingleBound(String name, BlockEntityType.BlockEntitySupplier<T> blockEntityFactory, Supplier<Block> validBlock) {
+        return register(name, blockEntityFactory, () -> Lists.newArrayList(validBlock.get()));
     }
 
     /**
      * Adds entry in provided {@code entrySup} to the queue, all entries from which will be registered later.
      * <p>
-     * This method also returns {@link TileEntityRegisterChain} to provide extra methods, which you can apply to entry being registered.
-     * All methods of {@link TileEntityRegisterChain} are optional.
+     * This method also returns {@link BlockEntityRegisterChain} to provide extra methods, which you can apply to entry being registered.
+     * All methods of {@link BlockEntityRegisterChain} are optional.
      *
      * @param name              The tile type's name, will automatically have the modid as a namespace.
      * @param tileEntityFactory A factory for the new tile, it should return a new instance every time it is called.
      * @param validBlocks       blocks, which can have this tile type.
-     * @return A {@link TileEntityRegisterChain} for adding some extra stuff.
-     * @see TileEntityRegisterChain
+     * @return A {@link BlockEntityRegisterChain} for adding some extra stuff.
+     * @see BlockEntityRegisterChain
      */
-    public <T extends BlockEntity> TileEntityRegisterChain<T> register(String name, BlockEntityType.BlockEntitySupplier<T> tileEntityFactory, Supplier<List<Block>> validBlocks) {
+    public <T extends BlockEntity> BlockEntityRegisterChain<T> register(String name, BlockEntityType.BlockEntitySupplier<T> tileEntityFactory, Supplier<List<Block>> validBlocks) {
         Supplier<BlockEntityType<T>> typeSupplier = () ->
                 BlockEntityType.Builder.of(tileEntityFactory, validBlocks.get().toArray(new Block[0]))
                         .build(null /*forge doesn't have support for it*/);
 
         Promised<BlockEntityType<T>> holder = registerEntry(name, typeSupplier);
-        return new TileEntityRegisterChain<>(holder);
+        return new BlockEntityRegisterChain<>(holder);
     }
 
-    public class TileEntityRegisterChain<T extends BlockEntity> extends RegisterChain<BlockEntityType<T>> {
-        private TileEntityRegisterChain(Promised<BlockEntityType<T>> holder) {
+    public class BlockEntityRegisterChain<T extends BlockEntity> extends RegisterChain<BlockEntityType<T>> {
+        private BlockEntityRegisterChain(Promised<BlockEntityType<T>> holder) {
             super(holder);
         }
 
-        public TileEntityRegisterChain<T> regCustomRenderer(Supplier<Function<? super BlockEntityRendererProvider.Context, BlockEntityRenderer<? super T>>> rendererFactory) {
-            clientSideOnly(() -> TileEntityRegister.regCustomRenderer(TileEntityRegister.this, asPromised(), rendererFactory));
+        public BlockEntityRegisterChain<T> regCustomRenderer(Supplier<Function<? super BlockEntityRendererProvider.Context, BlockEntityRenderer<? super T>>> rendererFactory) {
+            clientSideOnly(() -> BlockEntityRegister.regCustomRenderer(BlockEntityRegister.this, asPromised(), rendererFactory));
             return this;
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static <T extends BlockEntity> void regCustomRenderer(TileEntityRegister register, Promised<BlockEntityType<T>> registryObject, Supplier<Function<? super BlockEntityRendererProvider.Context, BlockEntityRenderer<? super T>>> rendererFactory) {
+    private static <T extends BlockEntity> void regCustomRenderer(BlockEntityRegister register, Promised<BlockEntityType<T>> registryObject, Supplier<Function<? super BlockEntityRendererProvider.Context, BlockEntityRenderer<? super T>>> rendererFactory) {
         register.runOnClientSetup(() -> {
-            BlockEntityRenderers.register(registryObject.get(), context_ -> new ProfiledTileEntityRenderer<>(context_, rendererFactory.get()));
+            BlockEntityRenderers.register(registryObject.get(), context_ -> new ProfiledBlockEntityRenderer<>(context_, rendererFactory.get()));
         });
     }
 }

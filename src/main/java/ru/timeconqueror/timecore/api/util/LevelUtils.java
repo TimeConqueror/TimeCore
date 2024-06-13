@@ -15,40 +15,40 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class LevelUtils {
-    public static <T> void forTypedTile(Level world, BlockPos pos, Class<T> clazz, Consumer<T> action) {
-        forTypedTile(world, pos, clazz, action, s -> {
+    public static <T> void forTypedBlockEntity(Level world, BlockPos pos, Class<T> clazz, Consumer<T> action) {
+        forTypedBlockEntity(world, pos, clazz, action, s -> {
         });
     }
 
-    public static <T> void forTypedTileWithWarn(Player player, Level world, BlockPos pos, Class<T> clazz, Consumer<T> action) {
-        forTypedTile(world, pos, clazz, action, message -> {
+    public static <T> void forTypedBlockEntityWithWarn(Player player, Level world, BlockPos pos, Class<T> clazz, Consumer<T> action) {
+        forTypedBlockEntity(world, pos, clazz, action, message -> {
             PlayerUtils.sendMessage(player, Component.literal(message).withStyle(ChatFormatting.RED));
             TimeCore.LOGGER.warn(message, new IllegalAccessException());
         });
     }
 
-    public static <T> void forTypedTileWithWarn(Level world, BlockPos pos, Class<T> clazz, Consumer<T> action) {
-        forTypedTile(world, pos, clazz, action, message -> TimeCore.LOGGER.warn(message, new IllegalAccessException()));
+    public static <T> void forTypedBlockEntityWithWarn(Level world, BlockPos pos, Class<T> clazz, Consumer<T> action) {
+        forTypedBlockEntity(world, pos, clazz, action, message -> TimeCore.LOGGER.warn(message, new IllegalAccessException()));
     }
 
-    public static <T> void forTileWithReqt(Level world, BlockPos pos, Class<T> clazz, Consumer<T> action) {
-        forTypedTile(world, pos, clazz, action, error -> {
+    public static <T> void forBlockEntityWithReqt(Level world, BlockPos pos, Class<T> clazz, Consumer<T> action) {
+        forTypedBlockEntity(world, pos, clazz, action, error -> {
             throw new IllegalStateException(error);
         });
     }
 
-    public static <T> void forTypedTile(Level world, BlockPos pos, Class<T> clazz, Consumer<T> action, Consumer<String> errorHandler) {
-        BlockEntity tile = world.getBlockEntity(pos);
+    public static <T> void forTypedBlockEntity(Level world, BlockPos pos, Class<T> clazz, Consumer<T> action, Consumer<String> errorHandler) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
 
-        if (tile == null) {
-            errorHandler.accept("Error. There's no tile on " + pos);//TODO localize here and in LootGames, TODO "more info in logs, where will be current block"
+        if (blockEntity == null) {
+            errorHandler.accept("Error. There's no block entity on " + pos);//TODO localize here and in LootGames, TODO "more info in logs, where will be current block"
             return;
         }
 
-        if (clazz.isInstance(tile)) {
-            action.accept((T) tile);
+        if (clazz.isInstance(blockEntity)) {
+            action.accept((T) blockEntity);
         } else {
-            errorHandler.accept("Error. There's a tile " + tile.getClass().getName() + " instead of " + clazz.getName() + " on " + pos);
+            errorHandler.accept("Error. There's a block entity " + blockEntity.getClass().getName() + " instead of " + clazz.getName() + " on " + pos);
         }
     }
 

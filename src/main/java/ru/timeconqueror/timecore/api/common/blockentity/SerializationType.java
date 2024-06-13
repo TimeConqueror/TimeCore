@@ -1,4 +1,4 @@
-package ru.timeconqueror.timecore.api.common.tile;
+package ru.timeconqueror.timecore.api.common.blockentity;
 
 public enum SerializationType {
     /**

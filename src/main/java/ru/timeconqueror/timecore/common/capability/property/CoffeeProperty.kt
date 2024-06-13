@@ -1,7 +1,7 @@
 package ru.timeconqueror.timecore.common.capability.property
 
 import net.minecraft.nbt.CompoundTag
-import ru.timeconqueror.timecore.api.common.tile.SerializationType
+import ru.timeconqueror.timecore.api.common.blockentity.SerializationType
 import ru.timeconqueror.timecore.common.capability.property.serializer.IPropertySerializer
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty

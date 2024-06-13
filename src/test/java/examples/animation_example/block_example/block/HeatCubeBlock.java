@@ -1,6 +1,6 @@
 package examples.animation_example.block_example.block;
 
-import examples.animation_example.block_example.registry.ATileRegistry;
+import examples.animation_example.block_example.registry.ABlockEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -36,11 +36,11 @@ public class HeatCubeBlock extends BaseEntityBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos_, BlockState state_) {
-        return ATileRegistry.HEAT_CUBE.create(pos_, state_);
+        return ABlockEntityRegistry.HEAT_CUBE.create(pos_, state_);
     }
 
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level_, BlockState state_, BlockEntityType<T> blockEntityType_) {
-        return ITickableBlockEntity.makeTicker(blockEntityType_, ATileRegistry.HEAT_CUBE);
+        return ITickableBlockEntity.makeTicker(blockEntityType_, ABlockEntityRegistry.HEAT_CUBE);
     }
 }

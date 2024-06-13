@@ -1,7 +1,7 @@
-package examples.animation_example.block_example.block.tile;
+package examples.animation_example.block_example.block.entity;
 
-import examples.animation_example.block_example.registry.ATileRegistry;
-import examples.animation_example.block_example.registry.TileAnimations;
+import examples.animation_example.block_example.registry.ABlockEntityRegistry;
+import examples.animation_example.block_example.registry.BlockEntityAnimations;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -14,11 +14,11 @@ import ru.timeconqueror.timecore.api.animation.AnimationStarter;
 import ru.timeconqueror.timecore.api.animation.AnimationSystems;
 import ru.timeconqueror.timecore.api.util.ITickableBlockEntity;
 
-public class TileHeatCube extends BlockEntity implements AnimatedObject<TileHeatCube>, ITickableBlockEntity {
-    private AnimationSystem<TileHeatCube> animationSystem;
+public class BlockEntityHeatCube extends BlockEntity implements AnimatedObject<BlockEntityHeatCube>, ITickableBlockEntity {
+    private AnimationSystem<BlockEntityHeatCube> animationSystem;
 
-    public TileHeatCube(BlockPos worldPosition_, BlockState blockState_) {
-        super(ATileRegistry.HEAT_CUBE, worldPosition_, blockState_);
+    public BlockEntityHeatCube(BlockPos worldPosition_, BlockState blockState_) {
+        super(ABlockEntityRegistry.HEAT_CUBE, worldPosition_, blockState_);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class TileHeatCube extends BlockEntity implements AnimatedObject<TileHeat
     }
 
     @Override
-    public @NotNull AnimationSystem<TileHeatCube> getSystem() {
+    public @NotNull AnimationSystem<BlockEntityHeatCube> getSystem() {
         return animationSystem;
     }
 
@@ -37,7 +37,7 @@ public class TileHeatCube extends BlockEntity implements AnimatedObject<TileHeat
         getSystem().onTick(level.isClientSide);
 
         if (level.isClientSide) {
-            getAnimationSystemApi().startAnimation(AnimationStarter.of(TileAnimations.heatCubeIdle).ignorable(true), AnimationConstants.MAIN_LAYER_NAME);
+            getAnimationSystemApi().startAnimation(AnimationStarter.of(BlockEntityAnimations.heatCubeIdle).ignorable(true), AnimationConstants.MAIN_LAYER_NAME);
         }
     }
 }

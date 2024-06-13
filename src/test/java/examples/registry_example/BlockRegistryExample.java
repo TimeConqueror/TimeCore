@@ -1,6 +1,6 @@
 package examples.registry_example;
 
-import examples.block.DummyBlockWithTileEntity;
+import examples.block.DummyBlockWithEntity;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Block;
 import ru.timeconqueror.timecore.TimeCore;
@@ -44,7 +44,7 @@ public class BlockRegistryExample {
                     .defaultBlockItem(CreativeModeTabs.TOOLS_AND_UTILITIES)
                     .oneVarStateAndCubeAllModel(new TextureLocation("minecraft", "block/emerald_ore"));
 
-            REGISTER.register("test_block_with_tile", () -> new DummyBlockWithTileEntity(propsCreator.create()))
+            REGISTER.register("test_block_with_tile", () -> new DummyBlockWithEntity(propsCreator.create()))
                     .defaultBlockItem(CreativeModeTabs.TOOLS_AND_UTILITIES)
                     .oneVarStateAndCubeAllModel(new TextureLocation("minecraft", "block/furnace"));
         }

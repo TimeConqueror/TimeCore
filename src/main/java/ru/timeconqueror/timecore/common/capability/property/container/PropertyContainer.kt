@@ -1,7 +1,7 @@
 package ru.timeconqueror.timecore.common.capability.property.container
 
 import net.minecraft.nbt.CompoundTag
-import ru.timeconqueror.timecore.api.common.tile.SerializationType
+import ru.timeconqueror.timecore.api.common.blockentity.SerializationType
 import ru.timeconqueror.timecore.common.capability.property.CoffeeObservableList
 import ru.timeconqueror.timecore.common.capability.property.CoffeeProperty
 import ru.timeconqueror.timecore.common.capability.property.serializer.*

@@ -14,7 +14,7 @@ public enum HorizontalDirection {
         this.direction = direction;
     }
 
-    public Direction get() {
+    public Direction toVanilla() {
         return direction;
     }
 }

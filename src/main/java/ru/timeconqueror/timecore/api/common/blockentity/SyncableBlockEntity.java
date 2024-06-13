@@ -1,4 +1,4 @@
-package ru.timeconqueror.timecore.api.common.tile;
+package ru.timeconqueror.timecore.api.common.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -13,13 +13,13 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Objects;
 
 /**
- * Syncable TileEntity.
+ * Syncable BlockEntity.
  * <p>
  * You can also control what should be sent to client
  * and what should be only used for saving.
  */
-public abstract class SyncableTile extends SimpleTile {
-    public SyncableTile(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
+public abstract class SyncableBlockEntity extends SimpleBlockEntity {
+    public SyncableBlockEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
         super(tileEntityTypeIn, pos, state);
     }
 

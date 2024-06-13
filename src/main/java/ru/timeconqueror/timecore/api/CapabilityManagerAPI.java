@@ -27,7 +27,7 @@ public class CapabilityManagerAPI {
     /**
      * Register the attacher, which will bind coffee capability instance to owner upon its creation. <br>
      * <i>Dynamic</i> means that the owner can return different capability instances depending on provided {@link Direction}
-     * as it works for ItemHandler in tile entities for example.
+     * as it works for ItemHandler in block entities for example.
      * <br>
      * Should be called during {@link FMLCommonSetupEvent} inside {@link FMLCommonSetupEvent#enqueueWork}
      *
@@ -45,7 +45,7 @@ public class CapabilityManagerAPI {
     /**
      * Register the attacher, which will bind vanilla capability instance to owner upon its creation. <br>
      * <i>Dynamic</i> means that the owner can return different capability instances depending on provided {@link Direction}
-     * as it works for ItemHandler in tile entities for example.
+     * as it works for ItemHandler in block entities for example.
      * <br>
      * Should be called during {@link FMLCommonSetupEvent} inside {@link FMLCommonSetupEvent#enqueueWork}
      *
@@ -63,7 +63,7 @@ public class CapabilityManagerAPI {
     /**
      * Register the attacher, which will bind coffee capability instance to owner upon its creation. <br>
      * <i>Static</i> means that the owner will return the same capability instance regardless of provided {@link Direction}
-     * (which is true for almost all available owners ({@link ICapabilityProvider}s) except tile entities).
+     * (which is true for almost all available owners ({@link ICapabilityProvider}s) except block entities).
      * <br>
      * Should be called during {@link FMLCommonSetupEvent} inside {@link FMLCommonSetupEvent#enqueueWork}
      *
@@ -81,7 +81,7 @@ public class CapabilityManagerAPI {
     /**
      * Register the attacher, which will bind vanilla capability instance to owner upon its creation. <br>
      * <i>Static</i> means that the owner will return the same capability instance regardless of provided {@link Direction}
-     * (which is true for almost all available owners ({@link ICapabilityProvider}s) except tile entities).
+     * (which is true for almost all available owners ({@link ICapabilityProvider}s) except block entities).
      * <br>
      * Should be called during {@link FMLCommonSetupEvent} inside {@link FMLCommonSetupEvent#enqueueWork}
      *

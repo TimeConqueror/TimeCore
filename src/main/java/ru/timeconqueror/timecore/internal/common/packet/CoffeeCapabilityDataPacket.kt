@@ -8,8 +8,8 @@ import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.fml.LogicalSide
 import net.minecraftforge.network.NetworkEvent
 import ru.timeconqueror.timecore.TimeCore
+import ru.timeconqueror.timecore.api.common.blockentity.SerializationType
 import ru.timeconqueror.timecore.api.common.packet.ITimePacketHandler
-import ru.timeconqueror.timecore.api.common.tile.SerializationType
 import ru.timeconqueror.timecore.common.capability.CoffeeCapabilityInstance
 import ru.timeconqueror.timecore.common.capability.property.CoffeeProperty
 import java.util.function.Predicate

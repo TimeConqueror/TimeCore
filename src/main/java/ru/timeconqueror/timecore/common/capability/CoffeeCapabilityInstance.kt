@@ -6,7 +6,7 @@ import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.ICapabilityProvider
 import net.minecraftforge.common.util.INBTSerializable
 import net.minecraftforge.network.simple.SimpleChannel
-import ru.timeconqueror.timecore.api.common.tile.SerializationType
+import ru.timeconqueror.timecore.api.common.blockentity.SerializationType
 import ru.timeconqueror.timecore.common.capability.owner.serializer.CapabilityOwnerCodec
 import ru.timeconqueror.timecore.common.capability.property.CoffeeProperty
 import ru.timeconqueror.timecore.common.capability.property.container.PropertyContainer

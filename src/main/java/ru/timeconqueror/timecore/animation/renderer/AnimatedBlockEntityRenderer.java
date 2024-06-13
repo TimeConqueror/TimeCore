@@ -11,22 +11,22 @@ import ru.timeconqueror.timecore.api.client.render.model.IModelPuppeteer;
 import ru.timeconqueror.timecore.api.client.render.model.ITimeModelRenderer;
 import ru.timeconqueror.timecore.client.render.model.TimeModel;
 
-public abstract class AnimatedTileEntityRenderer<T extends BlockEntity & AnimatedObject<T>> implements BlockEntityRenderer<T>, ITimeModelRenderer<T> {
+public abstract class AnimatedBlockEntityRenderer<T extends BlockEntity & AnimatedObject<T>> implements BlockEntityRenderer<T>, ITimeModelRenderer<T> {
     private final ModelPuppeteer<T> puppeteer = new ModelPuppeteer<>();
     protected TimeModel model;
 
-    public AnimatedTileEntityRenderer(TimeModel model) {
+    public AnimatedBlockEntityRenderer(TimeModel model) {
         this.model = model;
     }
 
     @Override
-    public void render(T tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(T blockEntity, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         getTimeModel().reset();
 
-        tileEntityIn.getSystem().getAnimationManager().applyAnimations(getTimeModel(), partialTicks);
-        puppeteer.processModel(tileEntityIn, model, partialTicks);
+        blockEntity.getSystem().getAnimationManager().applyAnimations(getTimeModel(), partialTicks);
+        puppeteer.processModel(blockEntity, model, partialTicks);
 
-        ResourceLocation texture = getTexture(tileEntityIn);
+        ResourceLocation texture = getTexture(blockEntity);
 
         RenderType renderType = model.renderType(texture);
 
@@ -39,7 +39,7 @@ public abstract class AnimatedTileEntityRenderer<T extends BlockEntity & Animate
         matrixStackIn.popPose();
     }
 
-    protected abstract ResourceLocation getTexture(T tileEntityIn);
+    protected abstract ResourceLocation getTexture(T blockEntity);
 
     @Override
     public TimeModel getTimeModel() {
