@@ -28,7 +28,6 @@ import ru.timeconqueror.timecore.api.registry.VanillaRegister;
 import ru.timeconqueror.timecore.api.registry.util.AutoRegistrable;
 import ru.timeconqueror.timecore.api.registry.util.AutoRegistrable.Entries;
 import ru.timeconqueror.timecore.api.registry.util.AutoRegistrable.Init;
-import ru.timeconqueror.timecore.api.util.EnvironmentUtils;
 import ru.timeconqueror.timecore.common.KotlinAutomaticEventSubscriber;
 import ru.timeconqueror.timecore.molang.MolangLoader;
 import ru.timeconqueror.timecore.util.AnnoScanningHelper;
@@ -116,10 +115,6 @@ public class ModInitializer {
         }
 
         ResourceLocation regKeyLoc = new ResourceLocation(registryKeyStr);
-        if (!EnvironmentUtils.registryExists(regKeyLoc)) {
-            throw new IllegalArgumentException(String.format("Registry with key %s is not found", registryKeyStr));
-        }
-
         ResourceKey<?> regKey = ResourceKey.createRegistryKey(regKeyLoc);
 
         Stream<ParentableField> fields;
