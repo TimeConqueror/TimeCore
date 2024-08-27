@@ -18,7 +18,6 @@ import ru.timeconqueror.timecore.animation.predefined.EntityPredefinedAnimations
 import ru.timeconqueror.timecore.api.animation.builders.AnimationManagerBuilder;
 import ru.timeconqueror.timecore.molang.SharedMolangObject;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
 public class AnimationSystems {
@@ -32,9 +31,11 @@ public class AnimationSystems {
             predefinedManager = new EntityPredefinedAnimationManager<>(entityPredefinedAnimations);
         }
 
-        return custom(entity,
+        Level level = entity.level();
+
+        return make(entity,
                 new EntityNetworkDispatcher<>(),
-                entity.level(),
+                level == null || level.isClientSide(),
                 predefinedManager,
                 animationManagerTuner);
     }
@@ -43,22 +44,22 @@ public class AnimationSystems {
             T blockEntity,
             Consumer<AnimationManagerBuilder> animationManagerTuner
     ) {
-        return custom(blockEntity,
+        Level level = blockEntity.getLevel();
+
+        return make(blockEntity,
                 new BlockEntityNetworkDispatcher<>(),
-                Objects.requireNonNull(blockEntity.getLevel()),
+                level == null /* for guis */ || level.isClientSide(),
                 EmptyPredefinedAnimationManager.empty(),
                 animationManagerTuner);
     }
 
-    public static <T extends AnimatedObject<T>> AnimationSystem<T> custom(
+    public static <T extends AnimatedObject<T>> AnimationSystem<T> make(
             T object,
             NetworkDispatcher<T> networkDispatcher,
-            Level level,
+            boolean clientSide,
             PredefinedAnimationManager<T> predefinedAnimationManager,
             Consumer<? super AnimationManagerBuilderImpl> animationManagerTuner
     ) {
-        var clientSide = level.isClientSide();
-
         AnimationManagerBuilderImpl animationManagerBuilder = new AnimationManagerBuilderImpl();
         animationManagerTuner.accept(animationManagerBuilder);
 
