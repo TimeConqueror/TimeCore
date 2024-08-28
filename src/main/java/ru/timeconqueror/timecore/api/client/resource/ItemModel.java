@@ -3,15 +3,17 @@ package ru.timeconqueror.timecore.api.client.resource;
 import ru.timeconqueror.timecore.api.client.resource.location.ModelLocation;
 import ru.timeconqueror.timecore.api.client.resource.location.TextureLocation;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ItemModel extends JSONTimeResource {
     /**
      * Represents the location of the model parent.
      */
     private final ModelLocation parent;
-    private final ArrayList<TextureLocation> layers = new ArrayList<>(1);
+    private final Map<String, TextureLocation> textureMap = new HashMap<>(1);
+    private int layerCounter;
 
     public ItemModel(StandardItemModelParents parent) {
         this(parent.getModelLocation());
@@ -24,13 +26,12 @@ public class ItemModel extends JSONTimeResource {
     @Override
     public String toJson() {
         String texturesValue = null;
-        if (!layers.isEmpty()) {
+        if (!textureMap.isEmpty()) {
             texturesValue = listOf(() -> {
-                String[] jsonLayers = new String[this.layers.size()];
-                for (int i = 0; i < layers.size(); i++) {
-                    jsonLayers[i] = property("layer" + i, layers.get(i).toString());
-                }
-                return jsonLayers;
+                return textureMap.entrySet()
+                        .stream()
+                        .map(e -> property(e.getKey(), e.getValue().toString()))
+                        .toArray(String[]::new);
             });
         }
 
@@ -46,6 +47,12 @@ public class ItemModel extends JSONTimeResource {
         }
     }
 
+    public ItemModel addTexture(String key, TextureLocation textureLocation) {
+        textureMap.put(key, textureLocation);
+
+        return this;
+    }
+
     /**
      * Adds texture layer to the model.
      * <p>
@@ -54,7 +61,8 @@ public class ItemModel extends JSONTimeResource {
      * Vanilla uses it in, for example, spawn egg model where the layers are represented by base texture and overlay (spots).
      */
     public ItemModel addTextureLayer(TextureLocation textureLocation) {
-        layers.add(textureLocation);
+        addTexture("layer" + layerCounter, textureLocation);
+        layerCounter++;
 
         return this;
     }
@@ -67,7 +75,8 @@ public class ItemModel extends JSONTimeResource {
      * Vanilla uses it in, for example, spawn egg model where the layers are represented by base texture and overlay (spots).
      */
     public ItemModel addTextureLayers(TextureLocation... textureLocations) {
-        layers.addAll(Arrays.asList(textureLocations));
+        Arrays.stream(textureLocations)
+                .forEach(this::addTextureLayer);
 
         return this;
     }
