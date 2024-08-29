@@ -1,5 +1,6 @@
 package ru.timeconqueror.timecore.api.devtools.gen.lang;
 
+import lombok.extern.log4j.Log4j2;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
@@ -42,6 +43,7 @@ import java.util.LinkedHashMap;
  *  </pre>
  * </blockquote>
  */
+@Log4j2
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class LangGeneratorFacade {
     private final LangJsonGenerator generator = new LangJsonGenerator();
@@ -199,8 +201,12 @@ public class LangGeneratorFacade {
         GatherDataEventAccessor hiddenStuff = (GatherDataEventAccessor) event;
 
         for (String mod : hiddenStuff.getConfig().getMods()) {
-            LangGeneratorFacade langGeneratorFacade = Storage.getFeatures(mod).getLangGeneratorFacade();
-            langGeneratorFacade.generator.save(mod, langGeneratorFacade.sections);
+            try {
+                LangGeneratorFacade langGeneratorFacade = Storage.getFeatures(mod).getLangGeneratorFacade();
+                langGeneratorFacade.generator.save(mod, langGeneratorFacade.sections);
+            } catch (Exception ex) {
+                throw new RuntimeException("Caught exception while saving lang entries for '%s' mod".formatted(mod), ex);
+            }
         }
     }
 }
