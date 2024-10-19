@@ -18,7 +18,7 @@ public class DefaultAnimationSystemCallers {
 
         if (living instanceof AnimatedObject<?> animated) {
             //needed for animation ticking on server side.
-            animated.getSystem().onTick(living.level().isClientSide);
+            animated.animationSystem().onTick(living.level().isClientSide);
         }
     }
 
@@ -26,9 +26,9 @@ public class DefaultAnimationSystemCallers {
     public static void onPlayerStartTracking(PlayerEvent.StartTracking event) {
         Entity target = event.getTarget();
         if (target instanceof AnimatedObject<?> animatedObj) {
-            AnimationManager animationManager = animatedObj.getSystem().getAnimationManager();
+            AnimationManager animationManager = animatedObj.animationSystem().getAnimationManager();
             var statesByLayer = ((BaseAnimationManager) animationManager).getLayerStates();
-            animatedObj.getSystem().getNetworkDispatcher().sendSyncAnimationsPacket(statesByLayer);
+            animatedObj.animationSystem().getNetworkDispatcher().sendSyncAnimationsPacket(statesByLayer);
         }
     }
 }

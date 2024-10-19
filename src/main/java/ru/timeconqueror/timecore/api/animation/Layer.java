@@ -21,6 +21,8 @@ public interface Layer {
 
     void addAnimationEventListener(AnimationEventListener listener);
 
+    void removeAnimationEventListener(AnimationEventListener listener);
+
 //    /**
 //     * Pauses the layer as well as the played animation.
 //     * Being frozen layer will also ignore animation adding and removal

@@ -7,6 +7,7 @@ import ru.timeconqueror.timecore.animation.watcher.AbstractAnimationTicker;
 import ru.timeconqueror.timecore.animation.watcher.AnimationTickerImpl;
 import ru.timeconqueror.timecore.animation.watcher.EmptyAnimationTicker;
 import ru.timeconqueror.timecore.animation.watcher.TransitionTicker;
+import ru.timeconqueror.timecore.api.animation.AnimationScript;
 import ru.timeconqueror.timecore.api.animation.BlendType;
 import ru.timeconqueror.timecore.api.animation.Layer;
 import ru.timeconqueror.timecore.api.animation.builders.LayerDefinition;
@@ -49,7 +50,7 @@ public class LayerImpl implements Layer, AnimationController {
         while (true) {
             AbstractAnimationTicker currentTicker = getCurrentTicker();
 
-            eventListeners.forEach(listener -> listener.onAnimationUpdate(this.name, currentTicker, clockTime));
+            eventListeners.forEach(listener -> listener.onAnimationTick(this.name, currentTicker, clockTime));
             currentTicker.update(this, clockTime);
 
             AbstractAnimationTicker newTicker = getCurrentTicker();
@@ -65,16 +66,17 @@ public class LayerImpl implements Layer, AnimationController {
     }
 
     @Override
-    public boolean startAnimation(AnimationData data, long clockTime, AnimationCompanionData companionData) {
-        if (data.isIgnorable() && getCurrentTicker().canIgnore(data)) {
+    public boolean startAnimationScript(AnimationScript animationScript, long clockTime) {
+        AnimationData animationData = animationScript.getAnimationData();
+        if (animationData.isIgnorable() && getCurrentTicker().canIgnore(animationData)) {
             return false;
         }
 
-        AnimationTickerImpl animationTicker = new AnimationTickerImpl(data, clockTime, companionData);
-        if (data.getTransitionTime() == 0) {
+        AnimationTickerImpl animationTicker = new AnimationTickerImpl(animationScript, clockTime);
+        if (animationData.getTransitionTime() == 0) {
             setCurrentTicker(animationTicker);
         } else {
-            setCurrentTicker(new TransitionTicker(getCurrentTicker(), data, companionData, clockTime, data.getTransitionTime()));
+            setCurrentTicker(new TransitionTicker(getCurrentTicker(), animationScript, clockTime, animationData.getTransitionTime()));
         }
 
         return true;
@@ -89,7 +91,7 @@ public class LayerImpl implements Layer, AnimationController {
             return;
         }
 
-        setCurrentTicker(new TransitionTicker(getCurrentTicker(), null, AnimationCompanionData.EMPTY, clockTime, transitionTime));
+        setCurrentTicker(new TransitionTicker(getCurrentTicker(), null, clockTime, transitionTime));
     }
 
     public void setCurrentTicker(AbstractAnimationTicker ticker) {
@@ -103,6 +105,11 @@ public class LayerImpl implements Layer, AnimationController {
     @Override
     public void addAnimationEventListener(AnimationEventListener listener) {
         this.eventListeners.add(listener);
+    }
+
+    @Override
+    public void removeAnimationEventListener(AnimationEventListener listener) {
+        this.eventListeners.remove(listener);
     }
 
     public AnimationState getAnimationState(long clockTime) {

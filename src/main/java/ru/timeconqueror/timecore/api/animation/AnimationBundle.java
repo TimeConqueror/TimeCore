@@ -21,6 +21,11 @@ public class AnimationBundle<T extends AnimatedObject<T>, DATA> {
         return new AnimationBundleBuilder<>();
     }
 
+    public AnimationScript.Builder toScriptBuilder(DATA data) {
+        return AnimationScript.builder(starter)
+                .withInplaceActions(mapActionsToInstances(data));
+    }
+
     public List<ActionInstance<? super T, DATA>> mapActionsToInstances(DATA data) {
         return getActions().entrySet().stream()
                 .map(e -> ActionInstance.<T, DATA>of(e.getKey(), e.getValue(), data))

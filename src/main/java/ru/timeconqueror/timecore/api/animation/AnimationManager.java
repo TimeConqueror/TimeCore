@@ -1,8 +1,6 @@
 package ru.timeconqueror.timecore.api.animation;
 
 import org.jetbrains.annotations.NotNull;
-import ru.timeconqueror.timecore.animation.AnimationCompanionData;
-import ru.timeconqueror.timecore.animation.AnimationData;
 import ru.timeconqueror.timecore.api.client.render.model.ITimeModel;
 import ru.timeconqueror.timecore.molang.SharedMolangObject;
 
@@ -44,7 +42,9 @@ public interface AnimationManager {
 	 */
 	void applyAnimations(ITimeModel model, float partialTick);
 
-    boolean startAnimation(AnimationData animationData, String layerName, AnimationCompanionData companion);
+	void tick();
+
+	boolean startAnimationScript(AnimationScript animationScript, String layerName);
 
     void stopAnimation(String layerName, int transitionTime);
 

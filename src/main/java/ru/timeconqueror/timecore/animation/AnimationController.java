@@ -1,13 +1,10 @@
 package ru.timeconqueror.timecore.animation;
 
 import ru.timeconqueror.timecore.animation.watcher.AbstractAnimationTicker;
+import ru.timeconqueror.timecore.api.animation.AnimationScript;
 
 public interface AnimationController {
-    default boolean startAnimation(AnimationData data, long clockTime) {
-        return startAnimation(data, clockTime, AnimationCompanionData.EMPTY);
-    }
-
-    boolean startAnimation(AnimationData data, long clockTime, AnimationCompanionData companionData);
+    boolean startAnimationScript(AnimationScript animationScript, long clockTime);
 
     void removeAnimation(long clockTime, int transitionTime);
 

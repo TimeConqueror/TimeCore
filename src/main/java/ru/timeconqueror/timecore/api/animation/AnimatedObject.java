@@ -1,6 +1,5 @@
 package ru.timeconqueror.timecore.api.animation;
 
-import org.jetbrains.annotations.NotNull;
 import ru.timeconqueror.timecore.animation.AnimationSystem;
 import ru.timeconqueror.timecore.animation.renderer.AnimatedLivingEntityRenderer;
 
@@ -41,12 +40,7 @@ public interface AnimatedObject<T extends AnimatedObject<T>> {
     /**
      * The entry point for accessing animation stuff.
      */
-    @NotNull
-    AnimationSystem<T> getSystem();
-
-    default AnimationSystemAPI<T> getAnimationSystemApi() {
-        return getSystem().api();
-    }
+    AnimationSystem<T> animationSystem();
 
     default void populateMolangObjects(MolangObjectFiller molangObjectFiller) {
 

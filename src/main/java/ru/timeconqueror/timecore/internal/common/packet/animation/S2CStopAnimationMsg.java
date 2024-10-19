@@ -20,7 +20,7 @@ public class S2CStopAnimationMsg extends S2CAnimationMsg {
 
         @Override
         public void onPacket(S2CStopAnimationMsg packet, AnimatedObject<?> owner, NetworkEvent.Context ctx) {
-            AnimationManager animationManager = owner.getSystem().getAnimationManager();
+            AnimationManager animationManager = owner.animationSystem().getAnimationManager();
             animationManager.stopAnimation(packet.layerName, packet.transitionTime);
         }
 

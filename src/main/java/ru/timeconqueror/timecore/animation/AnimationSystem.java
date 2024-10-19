@@ -1,44 +1,65 @@
 package ru.timeconqueror.timecore.animation;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
-import ru.timeconqueror.timecore.animation.clock.TickBasedClock;
+import ru.timeconqueror.timecore.animation.action.ActionFactory;
+import ru.timeconqueror.timecore.animation.action.AnimationEventListener;
 import ru.timeconqueror.timecore.animation.network.NetworkDispatcherInstance;
 import ru.timeconqueror.timecore.api.animation.*;
 
-@Getter
-public class AnimationSystem<T extends AnimatedObject<T>> {
-    private final T owner;
-    private final AnimationManager animationManager;
-    private final NetworkDispatcherInstance<T> networkDispatcher;
-    @Accessors(fluent = true)
-    private final AnimationSystemAPI<T> api;
-    private final Clock clock;
-    private final PredefinedAnimationManager<T> predefinedAnimationManager;
+public interface AnimationSystem<T extends AnimatedObject<T>> {
 
-    public AnimationSystem(T owner,
-                           Clock clock,
-                           AnimationManager animationManager,
-                           NetworkDispatcherInstance<T> networkDispatcher,
-                           PredefinedAnimationManager<T> predefinedAnimationManager) {
-        this.owner = owner;
-        this.clock = clock;
-        this.animationManager = animationManager;
-        this.networkDispatcher = networkDispatcher;
-        this.api = new AnimationSystemAPI<>(this);
-        this.predefinedAnimationManager = predefinedAnimationManager;
-    }
 
-    public void onTick(boolean clientSide) {
-        predefinedAnimationManager.onTick(this, owner);
+    boolean startAnimation(AnimationStarter animationStarter, String layerName);
 
-        if (clock instanceof TickBasedClock tickBasedClock) {
-            tickBasedClock.tick();
-        }
+//    <DATA> boolean startAnimation(AnimationStarter animationStarter, String layerName, List<ActionInstance<? super T, DATA>> actionList);
 
-        if (!clientSide) {
-            // simulate ticking
-            animationManager.applyAnimations(null, 0);
-        }
-    }
+//    boolean startAnimationWithPredefinedAction(AnimationStarter animationStarter, String layerName, String predefinedAction);
+//
+//    boolean startAnimationWithPredefinedAction(AnimationStarter animationStarter, String layerName, List<String> predefinedActions);
+//
+//    <DATA> boolean startAnimation(AnimationStarter animationStarter, String layerName, List<String> predefinedActions, List<ActionInstance<? super T, DATA>> actionList);
+
+    <DATA> boolean startAnimation(AnimationBundle<T, DATA> animationBundle, DATA actionData);
+
+    /**
+     * Stops animation from the layer with provided name.
+     * Default transition time: {@link AnimationConstants#BASIC_TRANSITION_TIME}
+     *
+     * @param layerName name of layer, where you need to stop animation.
+     */
+    void stopAnimation(String layerName);
+
+    /**
+     * Stops animation from the layer with provided name.
+     *
+     * @param layerName      name of layer, where you need to stop animation.
+     * @param transitionTime time of transition to the idle state.
+     *                       If this value is bigger than 0, then transition will be created, which will smoothly stop current animation.
+     */
+    void stopAnimation(String layerName, int transitionTime);
+
+    void addAnimationEventListener(String layerName, AnimationEventListener listener);
+
+    void removeAnimationEventListener(String layerName, AnimationEventListener listener);
+
+    <DATA> void registerPredefinedAction(String id, ActionFactory<T, DATA> actionFactory);
+
+    void onTick(boolean clientSide);
+
+    /**
+     * GETTERS
+     */
+
+    boolean isClientSide();
+
+    T getOwner();
+
+    AnimationManager getAnimationManager();
+
+    NetworkDispatcherInstance<T> getNetworkDispatcher();
+
+    Clock getClock();
+
+    PredefinedAnimationManager<T> getPredefinedAnimationManager();
+
+    PredefinedActionManager getPredefinedActionManager();
 }

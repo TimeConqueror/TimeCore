@@ -11,7 +11,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import ru.timeconqueror.timecore.api.animation.AnimatedObject;
 import ru.timeconqueror.timecore.api.client.render.model.IModelPuppeteer;
 import ru.timeconqueror.timecore.api.client.render.model.ITimeModelRenderer;
-import ru.timeconqueror.timecore.api.util.client.DrawHelper;
 import ru.timeconqueror.timecore.client.render.model.TimeEntityModel;
 
 @OnlyIn(Dist.CLIENT)
@@ -28,13 +27,13 @@ public abstract class AnimatedEntityRenderer<T extends Entity & AnimatedObject<T
     public void render(T entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
         getTimeModel().reset();
 
-        entity.getSystem().getAnimationManager().applyAnimations(model, partialTicks);
+        entity.animationSystem().getAnimationManager().applyAnimations(model, partialTicks);
 
         puppeteer.processModel(entity, model, partialTicks);
 
         RenderType type = model.renderType(getTextureLocation(entity));
-        int rgba = getRGBA(entity);
-        model.renderToBuffer(matrixStack, buffer.getBuffer(type), packedLight, packedLight, DrawHelper.getRed(rgba) / 255F, DrawHelper.getGreen(rgba) / 255F, DrawHelper.getBlue(rgba) / 255F, DrawHelper.getAlpha(rgba) / 255F);
+        int rgba = getRgbaColor(entity);
+        model.renderToBuffer(matrixStack, buffer.getBuffer(type), packedLight, packedLight, rgba);
         super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
     }
 
@@ -47,7 +46,7 @@ public abstract class AnimatedEntityRenderer<T extends Entity & AnimatedObject<T
         return puppeteer;
     }
 
-    public int getRGBA(T entity) {
+    public int getRgbaColor(T entity) {
         return 0xFFFFFFFF;
     }
 }

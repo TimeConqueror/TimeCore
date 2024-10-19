@@ -5,7 +5,6 @@ import lombok.Getter;
 import net.minecraft.world.entity.Entity;
 import ru.timeconqueror.timecore.animation.AnimationSystem;
 import ru.timeconqueror.timecore.api.animation.AnimatedObject;
-import ru.timeconqueror.timecore.api.animation.AnimationSystemAPI;
 import ru.timeconqueror.timecore.api.animation.PredefinedAnimationManager;
 
 @AllArgsConstructor
@@ -14,9 +13,8 @@ public class EntityPredefinedAnimationManager<T extends Entity & AnimatedObject<
     private final EntityPredefinedAnimations predefinedAnimations;
 
     @Override
-    public void onTick(AnimationSystem<T> animationSystem, T entity) {
+    public void onTick(AnimationSystem<T> system, T entity) {
         if (entity.level().isClientSide()) {
-            AnimationSystemAPI<T> api = animationSystem.api();
 
             var walkingAnim = predefinedAnimations.getWalkingAnimation();
             var idleAnim = predefinedAnimations.getIdleAnimation();
@@ -31,21 +29,21 @@ public class EntityPredefinedAnimationManager<T extends Entity & AnimatedObject<
                 // if there is no walking anim or the idle and walking anim's layers aren't the same
                 // we remove the idle animation
                 if (idleAnim != null && (walkingAnim == null || !sameLayers(idleAnim, walkingAnim))) {
-                    api.stopAnimation(idleAnim.getLayerName());
+                    system.stopAnimation(idleAnim.getLayerName());
                 }
 
                 if (walkingAnim != null) {
-                    api.startAnimation(walkingAnim.getStarter(), walkingAnim.getLayerName());
+                    system.startAnimation(walkingAnim.getStarter(), walkingAnim.getLayerName());
                 }
             } else {
                 // if there is no idle anim or the idle and walking anim's layers aren't the same
                 // we remove the walking animation
                 if (walkingAnim != null && (idleAnim == null || !sameLayers(idleAnim, walkingAnim))) {
-                    api.stopAnimation(walkingAnim.getLayerName());
+                    system.stopAnimation(walkingAnim.getLayerName());
                 }
 
                 if (idleAnim != null) {
-                    api.startAnimation(idleAnim.getStarter(), idleAnim.getLayerName());
+                    system.startAnimation(idleAnim.getStarter(), idleAnim.getLayerName());
                 }
             }
         }

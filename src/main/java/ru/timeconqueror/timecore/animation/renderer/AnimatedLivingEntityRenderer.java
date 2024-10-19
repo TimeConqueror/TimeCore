@@ -21,7 +21,7 @@ public abstract class AnimatedLivingEntityRenderer<T extends LivingEntity & Anim
     public void render(T entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
         getModel().reset();
 
-        entity.getSystem().getAnimationManager().applyAnimations(getModel(), partialTicks);
+        entity.animationSystem().getAnimationManager().applyAnimations(getModel(), partialTicks);
         super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
     }
 

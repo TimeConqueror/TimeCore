@@ -3,9 +3,9 @@ package ru.timeconqueror.timecore.animation.network;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.minecraftforge.network.PacketDistributor;
-import ru.timeconqueror.timecore.animation.AnimationData;
 import ru.timeconqueror.timecore.animation.network.codec.LevelObjectCodec;
 import ru.timeconqueror.timecore.api.animation.AnimatedObject;
+import ru.timeconqueror.timecore.api.animation.AnimationScript;
 import ru.timeconqueror.timecore.api.util.holder.Pair;
 import ru.timeconqueror.timecore.internal.common.packet.InternalPacketManager;
 import ru.timeconqueror.timecore.internal.common.packet.animation.S2CStartAnimationMsg;
@@ -20,8 +20,8 @@ public class NetworkDispatcherInstance<T extends AnimatedObject<T>> {
     @Getter
     private final T animatedObject;
 
-    public void sendSetAnimationPacket(AnimationData data, String layerName) {
-        InternalPacketManager.INSTANCE.send(getPacketTarget(), new S2CStartAnimationMsg(getCodecSupplier(), layerName, data));
+    public void sendSetAnimationPacket(AnimationScript animationScript, String layerName) {
+        InternalPacketManager.INSTANCE.send(getPacketTarget(), new S2CStartAnimationMsg(getCodecSupplier(), layerName, animationScript));
     }
 
     public void sendStopAnimationPacket(String layerName, int transitionTime) {

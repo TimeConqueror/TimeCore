@@ -3,10 +3,10 @@ package ru.timeconqueror.timecore.animation.watcher;
 import gg.moonflower.molangcompiler.api.MolangEnvironment;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
-import ru.timeconqueror.timecore.animation.AnimationCompanionData;
 import ru.timeconqueror.timecore.animation.AnimationController;
 import ru.timeconqueror.timecore.animation.AnimationData;
 import ru.timeconqueror.timecore.animation.network.AnimationState;
+import ru.timeconqueror.timecore.api.animation.AnimationScript;
 import ru.timeconqueror.timecore.api.animation.BlendType;
 import ru.timeconqueror.timecore.api.client.render.model.ITimeModel;
 import ru.timeconqueror.timecore.api.util.MathUtils;
@@ -18,11 +18,11 @@ public class TransitionTicker extends AbstractAnimationTicker {
     @Getter
     private final AbstractAnimationTicker destination;
 
-    public TransitionTicker(AbstractAnimationTicker source, @Nullable AnimationData destination, AnimationCompanionData destinationCompanion, long startClockTime, int transitionTime) {
+    public TransitionTicker(AbstractAnimationTicker source, @Nullable AnimationScript destinationScript, long startClockTime, int transitionTime) {
         super(new Timeline(transitionTime, 1.0F, false, startClockTime, 0));
         this.source = source;
         this.sourceFreezeTime = startClockTime;
-        this.destination = destination == null ? EmptyAnimationTicker.INSTANCE : new AnimationTickerImpl(destination, startClockTime + transitionTime, destinationCompanion);
+        this.destination = destinationScript == null ? EmptyAnimationTicker.INSTANCE : new AnimationTickerImpl(destinationScript, startClockTime + transitionTime);
     }
 
     public TransitionTicker(AnimationState.TransitionState transitionState, long currentClockTime) {

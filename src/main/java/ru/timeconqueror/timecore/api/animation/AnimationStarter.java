@@ -65,16 +65,6 @@ public interface AnimationStarter {
     AnimationStarter startingFrom(float animationTimePercentage);
 
     /**
-     * Setting this, you can make a chain of played animations.
-     * As soon as one ends, the next one will start immediately.
-     * This setting will avoid unpleasant flickering when moving from one animation to another.
-     * <br>
-     * <b color=yellow>Makes the current animation, which will be played before nextAnimationStarter, have {@link LoopMode#DO_NOT_LOOP} loop mode.</b>
-     * Default: null.
-     */
-    AnimationStarter withNextAnimation(AnimationStarter nextAnimationStarter);
-
-    /**
      * Make the animation go backwards
      * Default: false
      */
@@ -89,7 +79,7 @@ public interface AnimationStarter {
     /**
      * Overrides the loop mode which is provided by animation file.
      * <br>
-     * <b color=yellow>Doesn't take any effect, if {@link AnimationStarter#withNextAnimation(AnimationStarter)} is called in a chain with not null parameter.</b>
+     * <b color=yellow>Doesn't take any effect, if {@link AnimationScript.Builder#withNext(AnimationScript.Builder)} is called in a chain with not null parameter.</b>
      * Default: null
      */
     AnimationStarter withLoopMode(@Nullable LoopMode loopMode);

@@ -11,7 +11,7 @@ public interface AnimationEventListener {
 
     }
 
-    default void onAnimationUpdate(String layerName, AnimationTicker ticker, long clockTime) {
+    default void onAnimationTick(String layerName, AnimationTicker ticker, long clockTime) {
 
     }
 }

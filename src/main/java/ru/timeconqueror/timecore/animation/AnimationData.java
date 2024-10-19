@@ -27,9 +27,6 @@ public class AnimationData {
     boolean reversed;
     @Nullable
     LoopMode loopMode = null;
-    @Nullable
-    @Getter
-    AnimationData nextAnimationData;
 
     public static void encode(AnimationData animationData, FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(animationData.getAnimation().getId());
@@ -47,12 +44,6 @@ public class AnimationData {
         buffer.writeBoolean(animationData.loopMode != null);
         if (animationData.loopMode != null) {
             buffer.writeVarInt(LoopMode.ORDINAL_LOOKUP.from(animationData.loopMode));
-        }
-
-        boolean hasNextAnim = animationData.nextAnimationData != null;
-        buffer.writeBoolean(hasNextAnim);
-        if (hasNextAnim) {
-            encode(animationData.nextAnimationData, buffer);
         }
     }
 
@@ -73,11 +64,6 @@ public class AnimationData {
         boolean hasLoopMode = buffer.readBoolean();
         if (hasLoopMode) {
             animationData.loopMode = LoopMode.ORDINAL_LOOKUP.by(buffer.readVarInt());
-        }
-
-        boolean hasNextAnim = buffer.readBoolean();
-        if (hasNextAnim) {
-            animationData.nextAnimationData = decode(buffer);
         }
 
         return animationData;
@@ -102,16 +88,11 @@ public class AnimationData {
         animationData.ignorable = this.ignorable;
         animationData.startAnimationTime = startAnimationTime;
         animationData.transitionTime = this.transitionTime;
-        animationData.nextAnimationData = this.nextAnimationData != null ? this.nextAnimationData.copy() : null;
         animationData.noTransitionToNone = noTransitionToNone;
         animationData.reversed = reversed;
         animationData.loopMode = loopMode;
 
         return animationData;
-    }
-
-    public @Nullable AnimationData getNextAnimation() {
-        return nextAnimationData;
     }
 
     public int getElapsedLengthTillFirstBoundary() {

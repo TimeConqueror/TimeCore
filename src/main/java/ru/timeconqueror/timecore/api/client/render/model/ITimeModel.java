@@ -1,5 +1,9 @@
 package ru.timeconqueror.timecore.api.client.render.model;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 import ru.timeconqueror.timecore.client.render.model.InFileLocation;
 import ru.timeconqueror.timecore.client.render.model.TimeModelPart;
@@ -28,4 +32,7 @@ public interface ITimeModel {
      * Should be called before animation applying & render.
      */
     void reset();
+
+    @OnlyIn(Dist.CLIENT)
+    void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int light, int overlay, int rgba);
 }

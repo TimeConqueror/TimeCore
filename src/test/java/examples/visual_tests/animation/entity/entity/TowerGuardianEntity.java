@@ -34,7 +34,7 @@ public class TowerGuardianEntity extends Monster implements AnimatedObject<Tower
     }
 
     @Override
-    public @NotNull AnimationSystem<TowerGuardianEntity> getSystem() {
+    public @NotNull AnimationSystem<TowerGuardianEntity> animationSystem() {
         return animationSystem;
     }
 

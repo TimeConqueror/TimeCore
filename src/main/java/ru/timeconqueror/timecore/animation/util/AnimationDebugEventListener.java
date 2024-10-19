@@ -23,9 +23,9 @@ public class AnimationDebugEventListener implements AnimationEventListener {
     }
 
     @Override
-    public void onAnimationUpdate(String layerName, AnimationTicker ticker, long clockTime) {
+    public void onAnimationTick(String layerName, AnimationTicker ticker, long clockTime) {
         if (trackUpdates) {
-            log.debug("Updated animation on layer '{}': {}", layerName, ticker.print(clockTime));
+            log.debug("Animation ticked on layer '{}': {}", layerName, ticker.print(clockTime));
         }
     }
 }

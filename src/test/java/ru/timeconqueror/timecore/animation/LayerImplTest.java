@@ -9,6 +9,7 @@ import ru.timeconqueror.timecore.animation.component.BasicAnimation;
 import ru.timeconqueror.timecore.animation.component.LoopMode;
 import ru.timeconqueror.timecore.animation.watcher.AnimationTickerImpl;
 import ru.timeconqueror.timecore.api.animation.Animation;
+import ru.timeconqueror.timecore.api.animation.AnimationScript;
 import ru.timeconqueror.timecore.api.animation.BlendType;
 import ru.timeconqueror.timecore.api.animation.builders.LayerDefinition;
 import ru.timeconqueror.timecore.molang.SharedMolangObject;
@@ -41,8 +42,9 @@ public class LayerImplTest {
     public void shouldStartNewAnimationInstantlyIfTransitionTimeIsZero() {
         AnimationData data = new AnimationStarterImpl(animation).withTransitionTime(0).getData();
 
-        basicLayer.startAnimation(data, 0);
-
-        verify(basicLayer).setCurrentTicker(argThat(argument -> argument instanceof AnimationTickerImpl && argument.getAnimationData() == data));
+        AnimationScript animationScript = mock(AnimationScript.class);
+        doReturn(data).when(animationScript).getAnimationData();
+        basicLayer.startAnimationScript(animationScript, 0);
+        verify(basicLayer).setCurrentTicker(argThat(argument -> argument instanceof AnimationTickerImpl && ((AnimationTickerImpl) argument).getAnimationScript() == animationScript));
     }
 }

@@ -101,7 +101,7 @@ public class AnimatedRangedAttackGoal<T extends Mob & AnimatedObject<T>> extends
             float distanceFactor = Mth.clamp(f, 0.1F, 1.0F);
 
             ActionData actionData = new ActionData(distanceFactor, attackTarget);
-            entity.getAnimationSystemApi().startAnimation(animationBundle, actionData);
+            entity.animationSystem().startAnimation(animationBundle, actionData);
 
             this.rangedAttackTime = Mth.ceil(this.attackInterval);
         } else if (this.rangedAttackTime < 0) {

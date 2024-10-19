@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.minecraft.network.FriendlyByteBuf;
-import ru.timeconqueror.timecore.animation.AnimationData;
+import ru.timeconqueror.timecore.animation.AnimationScriptImpl;
+import ru.timeconqueror.timecore.api.animation.AnimationScript;
 
 public abstract sealed class AnimationState {
 
@@ -60,18 +61,18 @@ public abstract sealed class AnimationState {
     @Getter
     public static final class ActiveState extends AnimationState {
         private static final int KEY = 1;
-        private final AnimationData data;
+        private final AnimationScript animationScript;
         private final int elapsedTime;
 
         private ActiveState(FriendlyByteBuf buf) {
-            this.data = AnimationData.decode(buf);
+            this.animationScript = AnimationScriptImpl.decode(buf);
             this.elapsedTime = buf.readVarInt();
         }
 
         @Override
         public void serialize(FriendlyByteBuf buf) {
             buf.writeByte(KEY);
-            AnimationData.encode(data, buf);
+            AnimationScriptImpl.encode(animationScript, buf);
             buf.writeVarInt(elapsedTime);
         }
     }

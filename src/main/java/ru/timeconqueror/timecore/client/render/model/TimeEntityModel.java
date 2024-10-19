@@ -7,6 +7,7 @@ import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 import ru.timeconqueror.timecore.animation.renderer.ModelConfiguration;
 import ru.timeconqueror.timecore.api.client.render.model.ITimeModel;
+import ru.timeconqueror.timecore.api.util.client.DrawHelper;
 
 /**
  * For compatibility with generics which use {@link EntityModel}
@@ -27,6 +28,15 @@ public class TimeEntityModel<T extends Entity> extends EntityModel<T> implements
     @Override
     public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
+    }
+
+    @Override
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int light, int overlay, int rgbaColor) {
+        renderToBuffer(poseStack, vertexConsumer, light, overlay,
+                DrawHelper.getRed(rgbaColor) / 255F,
+                DrawHelper.getGreen(rgbaColor) / 255F,
+                DrawHelper.getBlue(rgbaColor) / 255F,
+                DrawHelper.getAlpha(rgbaColor) / 255F);
     }
 
     @Override

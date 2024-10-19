@@ -41,7 +41,7 @@ public class S2CSyncAnimationsMsg extends S2CAnimationMsg {
 
         @Override
         public void onPacket(S2CSyncAnimationsMsg packet, AnimatedObject<?> owner, NetworkEvent.Context ctx) {
-            ((BaseAnimationManager) owner.getSystem().getAnimationManager()).setLayersState(packet.statesByLayer);
+            ((BaseAnimationManager) owner.animationSystem().getAnimationManager()).setLayersState(packet.statesByLayer);
         }
     }
 }

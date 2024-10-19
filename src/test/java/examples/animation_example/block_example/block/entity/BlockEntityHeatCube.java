@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 import ru.timeconqueror.timecore.animation.AnimationSystem;
 import ru.timeconqueror.timecore.api.animation.AnimatedObject;
 import ru.timeconqueror.timecore.api.animation.AnimationConstants;
@@ -28,16 +27,16 @@ public class BlockEntityHeatCube extends BlockEntity implements AnimatedObject<B
     }
 
     @Override
-    public @NotNull AnimationSystem<BlockEntityHeatCube> getSystem() {
+    public AnimationSystem<BlockEntityHeatCube> animationSystem() {
         return animationSystem;
     }
 
     @Override
     public void tick(Level level) {
-        getSystem().onTick(level.isClientSide);
+        animationSystem().onTick(level.isClientSide);
 
         if (level.isClientSide) {
-            getAnimationSystemApi().startAnimation(AnimationStarter.of(BlockEntityAnimations.heatCubeIdle).ignorable(true), AnimationConstants.MAIN_LAYER_NAME);
+            animationSystem.startAnimation(AnimationStarter.of(BlockEntityAnimations.heatCubeIdle).ignorable(true), AnimationConstants.MAIN_LAYER_NAME);
         }
     }
 }

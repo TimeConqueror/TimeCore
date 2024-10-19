@@ -12,7 +12,7 @@ public class ActionInstance<T extends AnimatedObject<T>, DATA> {
     private final AnimationUpdateListener<? super T, DATA> updateListener;
     private final DATA data;
 
-    public static <T extends AnimatedObject<T>, DATA> ActionInstance<? super T, DATA> of(String id, AnimationUpdateListener<? super T, DATA> action, DATA data) {
+    public static <T extends AnimatedObject<T>, DATA> ActionInstance<T, DATA> of(String id, AnimationUpdateListener<? super T, DATA> action, DATA data) {
         //noinspection Convert2Diamond
         return new ActionInstance<T, DATA>(id, action, data);
     }

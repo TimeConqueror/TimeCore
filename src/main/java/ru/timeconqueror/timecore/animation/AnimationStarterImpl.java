@@ -70,12 +70,6 @@ public class AnimationStarterImpl implements AnimationStarter {
     }
 
     @Override
-    public AnimationStarter withNextAnimation(AnimationStarter nextAnimationStarter) {
-        data.nextAnimationData = nextAnimationStarter.getData();
-        return this;
-    }
-
-    @Override
     public AnimationStarter reversed() {
         data.reversed = true;
         return this;

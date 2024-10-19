@@ -177,12 +177,12 @@ public class FloroEntity extends Monster implements RangedAttackMob, AnimatedObj
     }
 
     private boolean canMove() {
-        AnimationData data = getSystem().getAnimationManager().getLayer(LAYER_SHOWING).getCurrentTicker().getAnimationData();
+        AnimationData data = animationSystem.getAnimationManager().getLayer(LAYER_SHOWING).getCurrentTicker().getAnimationData();
         return !isHidden() && !REVEALING_ACTION_STARTER.get().getData().equals(data) && !isHiding;
     }
 
     private void startHiddenAnimation() {
-        getAnimationSystemApi().startAnimation(EntityAnimations.floroReveal.starter()
+        animationSystem.startAnimation(EntityAnimations.floroReveal.starter()
                         .reversed()
                         .startingFrom(0)
                         .withLoopMode(LoopMode.HOLD_ON_LAST_FRAME)
@@ -211,7 +211,7 @@ public class FloroEntity extends Monster implements RangedAttackMob, AnimatedObj
     }
 
 
-    public @NotNull AnimationSystem<FloroEntity> getSystem() {
+    public @NotNull AnimationSystem<FloroEntity> animationSystem() {
         return animationSystem;
     }
 
@@ -232,7 +232,7 @@ public class FloroEntity extends Monster implements RangedAttackMob, AnimatedObj
 
         @Override
         public void start() {
-            getAnimationSystemApi().startAnimation(AnimationBundle.<FloroEntity, Void>builder()
+            animationSystem().startAnimation(AnimationBundle.<FloroEntity, Void>builder()
                             .starter(REVEALING_ACTION_STARTER.get())
                             .layerName(LAYER_SHOWING)
                             .action("REVEAL", Actions.onBoundaryEnd((floroEntity, data) -> floroEntity.setHidden(false)))
@@ -276,7 +276,7 @@ public class FloroEntity extends Monster implements RangedAttackMob, AnimatedObj
         public void start() {
             isHiding = true;
 
-            getAnimationSystemApi().startAnimation(AnimationBundle.<FloroEntity, Void>builder()
+            animationSystem().startAnimation(AnimationBundle.<FloroEntity, Void>builder()
                             .starter(EntityAnimations.floroReveal.starter().reversed().withLoopMode(LoopMode.HOLD_ON_LAST_FRAME))
                             .layerName(LAYER_SHOWING)
                             .action("HIDE", Actions.onBoundaryEnd((floroEntity, data) -> floroEntity.setHidden(true)))

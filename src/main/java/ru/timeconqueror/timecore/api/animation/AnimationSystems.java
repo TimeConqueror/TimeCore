@@ -6,6 +6,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
 import ru.timeconqueror.timecore.animation.AnimationSystem;
 import ru.timeconqueror.timecore.animation.BaseAnimationManager;
+import ru.timeconqueror.timecore.animation.action.LayerActionManager;
+import ru.timeconqueror.timecore.animation.action.PredefinedActionManagerImpl;
 import ru.timeconqueror.timecore.animation.builders.AnimationManagerBuilderImpl;
 import ru.timeconqueror.timecore.animation.clock.TickBasedClock;
 import ru.timeconqueror.timecore.animation.network.BlockEntityNetworkDispatcher;
@@ -19,6 +21,7 @@ import ru.timeconqueror.timecore.api.animation.builders.AnimationManagerBuilder;
 import ru.timeconqueror.timecore.molang.SharedMolangObject;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class AnimationSystems {
     public static <T extends Entity & AnimatedObject<T>> AnimationSystem<T> forEntity(
@@ -66,12 +69,15 @@ public class AnimationSystems {
         SharedMolangObject sharedObjects = new SharedMolangObject();
         object.populateMolangObjects(new MolangObjectFiller(sharedObjects));
 
+        PredefinedActionManagerImpl<T> predefinedActionManagerImpl = new PredefinedActionManagerImpl<>(object, clientSide);
         NetworkDispatcherInstance<T> networkDispatcherInstance = new NetworkDispatcherInstance<>(networkDispatcher, object);
 
         Clock clock = new TickBasedClock();
 
-        BaseAnimationManager animationManager = animationManagerBuilder.build(clientSide, clock, sharedObjects, networkDispatcherInstance);
+        Supplier<LayerActionManager> actionManagerFactory = () -> new LayerActionManager(object, predefinedActionManagerImpl);
 
-        return new AnimationSystem<>(object, clock, animationManager, networkDispatcherInstance, predefinedAnimationManager);
+        BaseAnimationManager animationManager = animationManagerBuilder.build(clientSide, clock, sharedObjects, actionManagerFactory, networkDispatcherInstance, predefinedActionManagerImpl);
+
+        return new AnimationSystemImpl<>(object, !clientSide, clock, animationManager, networkDispatcherInstance, predefinedAnimationManager, predefinedActionManagerImpl);
     }
 }

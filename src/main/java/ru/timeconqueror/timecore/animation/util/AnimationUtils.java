@@ -5,16 +5,18 @@ import ru.timeconqueror.timecore.api.animation.BlendType;
 import ru.timeconqueror.timecore.client.render.model.TimeModelPart;
 
 public class AnimationUtils {
+    public static final int MILLIS_IN_TICK = 50;
+
     public static long millisToTicks(long milliSeconds) {
-        return (long) Math.ceil(milliSeconds / 50F);
+        return (long) Math.ceil((float) milliSeconds / MILLIS_IN_TICK);
     }
 
     public static long ticksToMillis(long ticks) {
-        return ticks * 50;
+        return ticks * MILLIS_IN_TICK;
     }
 
     public static long ticksToMillis(double ticks) {
-        return Math.round(ticks * 50);
+        return Math.round(ticks * MILLIS_IN_TICK);
     }
 
     public static void applyRotation(TimeModelPart piece, BlendType blendType, float weight, Vector3f rotationIn) {
