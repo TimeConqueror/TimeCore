@@ -21,7 +21,11 @@ public interface AnimationScript {
     AnimationScript getNextScript();
 
     static Builder builder(AnimationStarter starter) {
-        return new Builder(starter);
+        return builder(starter.getData());
+    }
+
+    static Builder builder(AnimationData animationData) {
+        return new Builder(animationData);
     }
 
     class Builder {
@@ -33,8 +37,8 @@ public interface AnimationScript {
         @Nullable
         private Builder nextScriptBuilder;
 
-        public Builder(AnimationStarter starter) {
-            this.animationData = starter.getData();
+        public Builder(AnimationData data) {
+            this.animationData = data;
         }
 
         /**
@@ -80,12 +84,11 @@ public interface AnimationScript {
             if (predefinedActions != null ||
                     inplaceActions != null) {
 
-                List<String> syncedActionIds = Collections.emptyList();
-                List<String> unsyncedActionIds = Collections.emptyList();
-
+                List<String> actionsToSync = Collections.emptyList();
+                List<String> actionsToPlay = Collections.emptyList();
                 if (predefinedActions != null) {
-                    syncedActionIds = new ArrayList<>();
-                    unsyncedActionIds = new ArrayList<>();
+                    actionsToSync = new ArrayList<>();
+                    actionsToPlay = new ArrayList<>();
 
                     for (String actionId : predefinedActions) {
                         if (!predefinedActionManager.isKnown(actionId)) {
@@ -93,16 +96,19 @@ public interface AnimationScript {
                         }
 
                         if (predefinedActionManager.shouldBeSynced(actionId)) {
-                            syncedActionIds.add(actionId);
-                        } else {
-                            unsyncedActionIds.add(actionId);
+                            actionsToSync.add(actionId);
                         }
+
+                        if (predefinedActionManager.canBePlayed(actionId)) {
+                            actionsToPlay.add(actionId);
+                        }
+
                     }
                 }
 
                 companionData = new AnimationCompanionData(
-                        syncedActionIds,
-                        unsyncedActionIds,
+                        actionsToSync,
+                        actionsToPlay,
                         inplaceActions != null ? inplaceActions : Collections.emptyList()
                 );
             }

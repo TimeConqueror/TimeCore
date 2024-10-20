@@ -17,8 +17,7 @@ public class PredefinedActionManagerImpl<T extends AnimatedObject<T>> implements
     private final Map<String, ActionFactory<? super T, ?>> factories = new HashMap<>();
 
     public <DATA> void register(String id, ActionFactory<? super T, DATA> actionFactory) {
-        if (clientSide && actionFactory.getRunOnSide() == RunOnSide.SERVER
-                || !clientSide && actionFactory.getRunOnSide() == RunOnSide.CLIENT) {
+        if (clientSide && actionFactory.getRunOnSide() == RunOnSide.SERVER) {
             return;
         }
 
@@ -48,5 +47,15 @@ public class PredefinedActionManagerImpl<T extends AnimatedObject<T>> implements
     public boolean shouldBeSynced(String id) {
         ActionFactory<? super T, ?> factory = factories.get(id);
         return factory != null && factory.getRunOnSide() != RunOnSide.SERVER;
+    }
+
+    public boolean canBePlayed(String id) {
+        RunOnSide side = factories.get(id).getRunOnSide();
+
+        if (clientSide) {
+            return side == RunOnSide.BOTH || side == RunOnSide.CLIENT;
+        } else {
+            return side == RunOnSide.BOTH || side == RunOnSide.SERVER;
+        }
     }
 }

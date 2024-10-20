@@ -37,15 +37,18 @@ public class AnimationSystemImpl<T extends AnimatedObject<T>> implements Animati
         this.predefinedActionManagerImpl = predefinedActionManagerImpl;
     }
 
+    @Override
     public <DATA> boolean startAnimation(AnimationBundle<T, DATA> animationBundle, DATA actionData) {
         AnimationScript.Builder scriptBuilder = animationBundle.toScriptBuilder(actionData);
         return startAnimationScript(scriptBuilder, animationBundle.getLayerName());
     }
 
+    @Override
     public boolean startAnimation(AnimationStarter animationStarter, String layerName) {
         return startAnimationScript(AnimationScript.builder(animationStarter), layerName);
     }
 
+    @Override
     public boolean startAnimationScript(AnimationScript.Builder animationScriptBuilder, String layerName) {
         return getAnimationManager().startAnimationScript(animationScriptBuilder.build(predefinedActionManagerImpl), layerName);
     }

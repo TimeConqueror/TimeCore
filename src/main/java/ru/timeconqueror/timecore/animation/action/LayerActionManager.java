@@ -42,24 +42,12 @@ public class LayerActionManager implements AnimationEventListener {
                     currentActions.addAll(CollectionUtils.mapList(companionData.getInplaceActions(), ActionTicker::new));
                 }
 
-                if (!companionData.getPredefinedSyncedActions().isEmpty()) {
-                    List<ActionTicker> predefinedTickers = companionData.getPredefinedSyncedActions().stream()
+                if (!companionData.getPredefinedActionsToPlay().isEmpty()) {
+                    companionData.getPredefinedActionsToPlay().stream()
                             .map(predefinedActionManagerImpl::tryCreateAction)
                             .filter(Objects::nonNull)
                             .map(ActionTicker::new)
-                            .toList();
-
-                    currentActions.addAll(predefinedTickers);
-                }
-
-                if (!companionData.getPredefinedUnsyncedActions().isEmpty()) {
-                    List<ActionTicker> predefinedTickers = companionData.getPredefinedUnsyncedActions().stream()
-                            .map(predefinedActionManagerImpl::tryCreateAction)
-                            .filter(Objects::nonNull)
-                            .map(ActionTicker::new)
-                            .toList();
-
-                    currentActions.addAll(predefinedTickers);
+                            .forEach(actionTicker -> currentActions.add(actionTicker));
                 }
 
                 if (loggerEnabled) {

@@ -4,4 +4,6 @@ public interface PredefinedActionManager {
     boolean isKnown(String actionId);
 
     boolean shouldBeSynced(String actionId);
+
+    boolean canBePlayed(String actionId);
 }

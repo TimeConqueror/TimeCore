@@ -7,18 +7,11 @@ import ru.timeconqueror.timecore.api.animation.*;
 
 public interface AnimationSystem<T extends AnimatedObject<T>> {
 
-
     boolean startAnimation(AnimationStarter animationStarter, String layerName);
 
-//    <DATA> boolean startAnimation(AnimationStarter animationStarter, String layerName, List<ActionInstance<? super T, DATA>> actionList);
-
-//    boolean startAnimationWithPredefinedAction(AnimationStarter animationStarter, String layerName, String predefinedAction);
-//
-//    boolean startAnimationWithPredefinedAction(AnimationStarter animationStarter, String layerName, List<String> predefinedActions);
-//
-//    <DATA> boolean startAnimation(AnimationStarter animationStarter, String layerName, List<String> predefinedActions, List<ActionInstance<? super T, DATA>> actionList);
-
     <DATA> boolean startAnimation(AnimationBundle<T, DATA> animationBundle, DATA actionData);
+
+    boolean startAnimationScript(AnimationScript.Builder animationScriptBuilder, String layerName);
 
     /**
      * Stops animation from the layer with provided name.
