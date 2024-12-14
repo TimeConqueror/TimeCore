@@ -1,7 +1,7 @@
 package ru.timeconqueror.timecore.animation;
 
-import ru.timeconqueror.timecore.animation.action.ActionFactory;
 import ru.timeconqueror.timecore.animation.action.AnimationEventListener;
+import ru.timeconqueror.timecore.animation.action.BakedActionFactory;
 import ru.timeconqueror.timecore.animation.network.NetworkDispatcherInstance;
 import ru.timeconqueror.timecore.api.animation.*;
 
@@ -34,7 +34,7 @@ public interface AnimationSystem<T extends AnimatedObject<T>> {
 
     void removeAnimationEventListener(String layerName, AnimationEventListener listener);
 
-    <DATA> void registerPredefinedAction(String id, ActionFactory<T, DATA> actionFactory);
+    void registerPredefinedAction(String id, BakedActionFactory<T> bakedActionFactory);
 
     void onTick(boolean clientSide);
 

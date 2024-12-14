@@ -8,5 +8,5 @@ public interface AnimationController {
 
     void removeAnimation(long clockTime, int transitionTime);
 
-    void setCurrentTicker(AbstractAnimationTicker ticker);
+    void setCurrentTicker(AbstractAnimationTicker ticker, long clockTime);
 }

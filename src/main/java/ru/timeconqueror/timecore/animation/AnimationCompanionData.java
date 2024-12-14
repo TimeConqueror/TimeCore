@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 import net.minecraft.network.FriendlyByteBuf;
 import ru.timeconqueror.timecore.animation.action.PredefinedActionManagerImpl;
-import ru.timeconqueror.timecore.api.animation.action.ActionInstance;
+import ru.timeconqueror.timecore.api.animation.action.BakedAction;
 import ru.timeconqueror.timecore.api.util.BufferUtils;
 
 import java.util.Collections;
@@ -29,7 +29,7 @@ public class AnimationCompanionData {
      * Actions, which will be played only on the side, where the animation script is created.
      * Can't be synced.
      */
-    private transient final List<ActionInstance<?, ?>> inplaceActions;
+    private transient final List<BakedAction<?>> inplaceActions;
 
     public boolean isEmpty() {
         return this == EMPTY;

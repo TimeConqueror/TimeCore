@@ -2,28 +2,24 @@ package ru.timeconqueror.timecore.api;
 
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
-import ru.timeconqueror.timecore.api.util.CollectionUtils;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class Markers {
-    public static final Marker RESOURCE_SYSTEM = RegisteredMarker.RESOURCE_SYSTEM.getMarker();
-    public static final Marker ANIMATIONS = RegisteredMarker.ANIMATIONS.getMarker();
+    private static final Set<Marker> ALL_MARKERS = new HashSet<>();
 
-    public static Marker[] getAll() {
-        return CollectionUtils.mapArray(RegisteredMarker.values(), Marker[]::new, RegisteredMarker::getMarker);
+    public static final Marker RESOURCES = register("RESOURCES");
+    public static final Marker ANIMATIONS = register("ANIMATIONS");
+    public static final Marker ACTIONS = register("ACTIONS");
+
+    private static Marker register(String name) {
+        Marker marker = MarkerManager.getMarker(name);
+        ALL_MARKERS.add(marker);
+        return marker;
     }
 
-    private enum RegisteredMarker {
-        RESOURCE_SYSTEM,
-        ANIMATIONS;
-
-        private final Marker marker;
-
-        RegisteredMarker() {
-            this.marker = MarkerManager.getMarker(this.name());
-        }
-
-        public Marker getMarker() {
-            return marker;
-        }
+    public static Marker[] all() {
+        return ALL_MARKERS.toArray(new Marker[0]);
     }
 }

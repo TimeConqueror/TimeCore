@@ -7,7 +7,7 @@ public interface AnimationEventListener {
 
     }
 
-    default void onAnimationStopped(String layerName, AnimationTicker ticker) {
+    default void onAnimationStopped(String layerName, AnimationTicker ticker, long clockTime) {
 
     }
 

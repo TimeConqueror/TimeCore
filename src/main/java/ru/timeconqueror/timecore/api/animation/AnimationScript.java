@@ -5,7 +5,7 @@ import ru.timeconqueror.timecore.animation.AnimationCompanionData;
 import ru.timeconqueror.timecore.animation.AnimationData;
 import ru.timeconqueror.timecore.animation.AnimationScriptImpl;
 import ru.timeconqueror.timecore.animation.component.LoopMode;
-import ru.timeconqueror.timecore.api.animation.action.ActionInstance;
+import ru.timeconqueror.timecore.api.animation.action.BakedAction;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +33,7 @@ public interface AnimationScript {
         @Nullable
         private List<String> predefinedActions;
         @Nullable
-        private List<ActionInstance<?, ?>> inplaceActions;
+        private List<BakedAction<?>> inplaceActions;
         @Nullable
         private Builder nextScriptBuilder;
 
@@ -54,7 +54,7 @@ public interface AnimationScript {
             return this;
         }
 
-        public Builder withInplaceAction(ActionInstance<?, ?> action) {
+        public Builder withInplaceAction(BakedAction<?> action) {
             if (this.inplaceActions == null) {
                 this.inplaceActions = new ArrayList<>();
             }
@@ -62,7 +62,7 @@ public interface AnimationScript {
             return this;
         }
 
-        public <T, DATA> Builder withInplaceActions(Collection<ActionInstance<? super T, DATA>> actions) {
+        public <T> Builder withInplaceActions(Collection<BakedAction<? super T>> actions) {
             if (this.inplaceActions == null) {
                 this.inplaceActions = new ArrayList<>();
             }

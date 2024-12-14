@@ -3,6 +3,7 @@ package ru.timeconqueror.timecore.animation.watcher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -605,5 +606,16 @@ public class TimelineTest {
         assertTrue(timeline.isAnimationTimeReachedOnCurrentCycle(150, 101));
         assertTrue(timeline.isAnimationTimeReachedOnCurrentCycle(150, 100));
         assertFalse(timeline.isAnimationTimeReachedOnCurrentCycle(150, 99));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1000, 1, 1000",
+            "1000, 2, 500",
+            "1000, 5, 200"
+    })
+    public void getClockTimeOnFirstBoundary_Tests(int length, int speed, int expectedClockTime) {
+        Timeline timeline = new Timeline(length, speed, false, 0, 0);
+        assertEquals(expectedClockTime, timeline.getClockTimeOnFirstBoundary());
     }
 }

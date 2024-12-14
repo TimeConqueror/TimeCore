@@ -8,25 +8,23 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 import ru.timeconqueror.timecore.animation.util.AnimationUtils;
 import ru.timeconqueror.timecore.api.animation.AnimatedObject;
 import ru.timeconqueror.timecore.api.animation.AnimationBundle;
+import ru.timeconqueror.timecore.api.animation.action.ActionContext;
 
 import java.util.EnumSet;
-import java.util.function.BiConsumer;
 
 public class AnimatedRangedAttackGoal<T extends Mob & AnimatedObject<T>> extends Goal {
-    public static final BiConsumer<RangedAttackMob, ActionData> STANDARD_RUNNER =
-            (entity, actionData) -> entity.performRangedAttack(actionData.getAttackTarget(), actionData.getDistanceFactor());
 
     private final T entity;
     private final double entityMoveSpeed;
     private final float attackInterval;
     private final float attackRadius;
     private final float maxAttackDistance;
-    private final AnimationBundle<T, ActionData> animationBundle;
+    private final AnimationBundle<T, ActionProps> animationBundle;
     private LivingEntity attackTarget;
     private int rangedAttackTime = -1;
     private int seeTime;
 
-    public AnimatedRangedAttackGoal(T attacker, AnimationBundle<T, ActionData> animationBundle, double moveSpeed, float maxAttackDistance) {
+    public AnimatedRangedAttackGoal(T attacker, AnimationBundle<T, ActionProps> animationBundle, double moveSpeed, float maxAttackDistance) {
         this.entity = attacker;
         this.entityMoveSpeed = moveSpeed;
         this.attackRadius = maxAttackDistance;
@@ -37,6 +35,10 @@ public class AnimatedRangedAttackGoal<T extends Mob & AnimatedObject<T>> extends
         this.attackInterval = AnimationUtils.millisToTicks(
                 animationBundle.getStarter().getData().getElapsedLengthTillFirstBoundary()
         );
+    }
+
+    public static void redirectToPerformRangedAttack(ActionContext<? extends RangedAttackMob> ctx, ActionProps props) {
+        ctx.getOwner().performRangedAttack(props.getAttackTarget(), props.getDistanceFactor());
     }
 
     /**
@@ -100,8 +102,8 @@ public class AnimatedRangedAttackGoal<T extends Mob & AnimatedObject<T>> extends
             float f = Mth.sqrt(d0) / this.attackRadius;
             float distanceFactor = Mth.clamp(f, 0.1F, 1.0F);
 
-            ActionData actionData = new ActionData(distanceFactor, attackTarget);
-            entity.animationSystem().startAnimation(animationBundle, actionData);
+            ActionProps actionProps = new ActionProps(distanceFactor, attackTarget);
+            entity.animationSystem().startAnimation(animationBundle, actionProps);
 
             this.rangedAttackTime = Mth.ceil(this.attackInterval);
         } else if (this.rangedAttackTime < 0) {
@@ -109,11 +111,11 @@ public class AnimatedRangedAttackGoal<T extends Mob & AnimatedObject<T>> extends
         }
     }
 
-    public static class ActionData {
+    public static class ActionProps {
         private final float distanceFactor;
         private final LivingEntity attackTarget;
 
-        public ActionData(float distanceFactor, LivingEntity attackTarget) {
+        public ActionProps(float distanceFactor, LivingEntity attackTarget) {
             this.distanceFactor = distanceFactor;
             this.attackTarget = attackTarget;
         }

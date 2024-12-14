@@ -57,7 +57,7 @@ public final class TimeCore {
     }
 
     private void onConstruct(FMLConstructModEvent event) {
-        EnvironmentUtils.handleMarkerVisibility(TimeCore.MODID, MARKER_PROPERTY, Markers.getAll());
+        EnvironmentUtils.handleMarkerVisibility(TimeCore.MODID, MARKER_PROPERTY, Markers.all());
     }
 
     private void setup(final FMLCommonSetupEvent event) {

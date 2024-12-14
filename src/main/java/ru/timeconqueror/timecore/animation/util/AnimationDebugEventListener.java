@@ -18,8 +18,8 @@ public class AnimationDebugEventListener implements AnimationEventListener {
     }
 
     @Override
-    public void onAnimationStopped(String layerName, AnimationTicker ticker) {
-        log.debug("Stopped animation on layer '{}': {}", layerName, ticker.print(clock.getMillis()));
+    public void onAnimationStopped(String layerName, AnimationTicker ticker, long clockTime) {
+        log.debug("Stopped animation on layer '{}': {}", layerName, ticker.print(clockTime));
     }
 
     @Override

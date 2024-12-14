@@ -49,12 +49,11 @@ public class LayerImpl implements Layer, AnimationController {
     public void update(long clockTime) {
         while (true) {
             AbstractAnimationTicker currentTicker = getCurrentTicker();
-
-            eventListeners.forEach(listener -> listener.onAnimationTick(this.name, currentTicker, clockTime));
             currentTicker.update(this, clockTime);
 
             AbstractAnimationTicker newTicker = getCurrentTicker();
             if (newTicker == currentTicker) {
+                eventListeners.forEach(listener -> listener.onAnimationTick(this.name, currentTicker, clockTime));
                 break;
             }
         }
@@ -74,9 +73,9 @@ public class LayerImpl implements Layer, AnimationController {
 
         AnimationTickerImpl animationTicker = new AnimationTickerImpl(animationScript, clockTime);
         if (animationData.getTransitionTime() == 0) {
-            setCurrentTicker(animationTicker);
+            setCurrentTicker(animationTicker, clockTime);
         } else {
-            setCurrentTicker(new TransitionTicker(getCurrentTicker(), animationScript, clockTime, animationData.getTransitionTime()));
+            setCurrentTicker(new TransitionTicker(getCurrentTicker(), animationScript, clockTime, animationData.getTransitionTime()), clockTime);
         }
 
         return true;
@@ -84,18 +83,18 @@ public class LayerImpl implements Layer, AnimationController {
 
     @Override
     public void removeAnimation(long clockTime, int transitionTime) {
-        if (getName().isEmpty()) return;
+        if (getCurrentTicker().isEmpty()) return;
 
         if (transitionTime == 0) {
-            setCurrentTicker(EmptyAnimationTicker.INSTANCE);
+            setCurrentTicker(EmptyAnimationTicker.INSTANCE, clockTime);
             return;
         }
 
-        setCurrentTicker(new TransitionTicker(getCurrentTicker(), null, clockTime, transitionTime));
+        setCurrentTicker(new TransitionTicker(getCurrentTicker(), null, clockTime, transitionTime), clockTime);
     }
 
-    public void setCurrentTicker(AbstractAnimationTicker ticker) {
-        eventListeners.forEach(listener -> listener.onAnimationStopped(this.name, getCurrentTicker()));
+    public void setCurrentTicker(AbstractAnimationTicker ticker, long clockTime) {
+        eventListeners.forEach(listener -> listener.onAnimationStopped(this.name, getCurrentTicker(), clockTime));
 
         this.currentTicker = ticker;
 
@@ -117,6 +116,6 @@ public class LayerImpl implements Layer, AnimationController {
     }
 
     public void setAnimationState(AnimationState state, long clockTime) {
-        setCurrentTicker(AbstractAnimationTicker.fromState(state, clockTime));
+        setCurrentTicker(AbstractAnimationTicker.fromState(state, clockTime), clockTime);
     }
 }

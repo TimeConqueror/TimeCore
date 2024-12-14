@@ -7,10 +7,12 @@ import ru.timeconqueror.timecore.api.animation.AnimationTicker;
 
 @Getter
 @AllArgsConstructor
-public class ActionContext<T extends AnimatedObject<T>, DATA> {
+public class ActionContext<T extends AnimatedObject<T>> {
     private final AnimationTicker ticker;
     private final T owner;
-    private final DATA extraData;
+    /**
+     * Note: For non-looped animations clockTime is guaranteed to not exceed animation elapsed length.
+     */
     private final long clockTime;
-    private final int lastAnimationCycleIndex;
+    private final long lastAnimationCycleIndex;
 }

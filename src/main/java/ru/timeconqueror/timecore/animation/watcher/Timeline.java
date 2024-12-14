@@ -30,7 +30,7 @@ public class Timeline {
     }
 
     /**
-     * Returns the real time in milliseconds it will take to play the animation, as if it were not looped and taking into account the provided parameters.
+     * Returns the clock time it will take to play the animation, as if it were not looped and taking into account the provided parameters.
      * If speed is 0, it will return {@link Integer#MAX_VALUE}.
      */
     public static int getFirstBoundaryElapsedLength(int length, int animationStartTime, float speed, boolean reversed) {
@@ -54,13 +54,25 @@ public class Timeline {
     }
 
     /**
-     * Returns the remaining real time in milliseconds it will take to play the animation to get to its first boundary (which is start or end).
+     * Returns the remaining clock time it will take to play the animation to get to its first boundary (which is start or end).
      */
     public long getElapsedTimeTillFirstBoundary(long clockTime) {
         long absAnimationTime = getAbsoluteAnimationTime(clockTime);
         int firstBoundaryLength = getFirstBoundaryAnimationLength();
 
         return Math.max(firstBoundaryLength - absAnimationTime, 0);
+    }
+
+    /**
+     * Returns the clock time of when the timeline reaches its first boundary
+     */
+    public long getClockTimeOnFirstBoundary() {
+        int elapsedLength = getFirstBoundaryElapsedLength(length, animationStartTime, speed, reversed);
+        if (elapsedLength == Integer.MAX_VALUE) {
+            return Long.MAX_VALUE;
+        } else {
+            return startClockTime + elapsedLength;
+        }
     }
 
     /**
@@ -90,7 +102,7 @@ public class Timeline {
     }
 
     /**
-     * Returns the amount of real time in milliseconds which is passed from the start of bound animation.
+     * Returns the amount of clock time which is passed from the start of bound animation.
      * May also return negative values.
      */
     public int getElapsedTime(long clockTime) {

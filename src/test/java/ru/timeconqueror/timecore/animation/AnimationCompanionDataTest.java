@@ -5,7 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import ru.timeconqueror.timecore.api.animation.action.ActionInstance;
+import ru.timeconqueror.timecore.api.animation.action.BakedAction;
 import ru.timeconqueror.timecore.test_utils.CartesianProduct;
 
 import java.util.Collections;
@@ -45,8 +45,8 @@ class AnimationCompanionDataTest {
                 Collections.emptyList(), List.of("test2")
         );
 
-        ActionInstance<?, ?> mockedActionInstance = mock(ActionInstance.class);
-        List<List<ActionInstance<?, ?>>> inplaceActions = List.of(
+        BakedAction<?> mockedActionInstance = mock(BakedAction.class);
+        List<List<BakedAction<?>>> inplaceActions = List.of(
                 Collections.emptyList(), List.of(mockedActionInstance)
         );
 

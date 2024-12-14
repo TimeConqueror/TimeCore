@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 import ru.timeconqueror.timecore.api.animation.AnimatedObject;
 import ru.timeconqueror.timecore.api.animation.PredefinedActionManager;
-import ru.timeconqueror.timecore.api.animation.action.ActionInstance;
-import ru.timeconqueror.timecore.api.animation.action.AnimationUpdateListener;
+import ru.timeconqueror.timecore.api.animation.action.BakedAction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,28 +13,25 @@ import java.util.Map;
 public class PredefinedActionManagerImpl<T extends AnimatedObject<T>> implements PredefinedActionManager {
     private final T owner;
     private final boolean clientSide;
-    private final Map<String, ActionFactory<? super T, ?>> factories = new HashMap<>();
+    private final Map<String, BakedActionFactory<? super T>> factories = new HashMap<>();
 
-    public <DATA> void register(String id, ActionFactory<? super T, DATA> actionFactory) {
-        if (clientSide && actionFactory.getRunOnSide() == RunOnSide.SERVER) {
+    public void register(String id, BakedActionFactory<? super T> bakedActionFactory) {
+        if (clientSide && bakedActionFactory.getRunOnSide() == RunOnSide.SERVER) {
             return;
         }
 
-        factories.put(id, actionFactory);
+        factories.put(id, bakedActionFactory);
     }
 
     @Nullable
-    public ActionInstance<T, ?> tryCreateAction(String id) {
-        ActionFactory<? super T, ?> actionFactory = factories.get(id);
-        if (actionFactory == null) {
+    public BakedAction<T> tryCreateAction(String id) {
+        BakedActionFactory<? super T> bakedActionFactory = factories.get(id);
+        if (bakedActionFactory == null) {
             return null;
         }
 
-        AnimationUpdateListener<? super T, Object> listener = (AnimationUpdateListener<? super T, Object>) actionFactory.getListener();
-        Object data = actionFactory.getDataSupplier().apply(owner);
-
-        //noinspection RedundantTypeArguments
-        return ActionInstance.<T, Object>of(id, listener, data);
+        //noinspection unchecked
+        return (BakedAction<T>) bakedActionFactory.getActionFactory().apply(owner);
     }
 
     @Override
@@ -45,7 +41,7 @@ public class PredefinedActionManagerImpl<T extends AnimatedObject<T>> implements
 
     @Override
     public boolean shouldBeSynced(String id) {
-        ActionFactory<? super T, ?> factory = factories.get(id);
+        BakedActionFactory<? super T> factory = factories.get(id);
         return factory != null && factory.getRunOnSide() != RunOnSide.SERVER;
     }
 

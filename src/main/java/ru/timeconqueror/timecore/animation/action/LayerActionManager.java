@@ -8,8 +8,7 @@ import ru.timeconqueror.timecore.api.animation.AnimatedObject;
 import ru.timeconqueror.timecore.api.animation.AnimationScript;
 import ru.timeconqueror.timecore.api.animation.AnimationTicker;
 import ru.timeconqueror.timecore.api.animation.action.ActionContext;
-import ru.timeconqueror.timecore.api.animation.action.ActionInstance;
-import ru.timeconqueror.timecore.api.animation.action.AnimationUpdateListener;
+import ru.timeconqueror.timecore.api.animation.action.BakedAction;
 import ru.timeconqueror.timecore.api.util.CollectionUtils;
 import ru.timeconqueror.timecore.api.util.Empty;
 
@@ -58,7 +57,8 @@ public class LayerActionManager implements AnimationEventListener {
     }
 
     @Override
-    public void onAnimationStopped(String layerName, AnimationTicker ticker) {
+    public void onAnimationStopped(String layerName, AnimationTicker ticker, long clockTime) {
+        onAnimationTick(layerName, ticker, clockTime);
         if (ticker instanceof AnimationTickerImpl && currentActions != null) {
             if (loggerEnabled) {
                 log.debug("Stopped actions on layer '{}': {}", layerName, getCurrentActionIds());
@@ -77,22 +77,26 @@ public class LayerActionManager implements AnimationEventListener {
     }
 
     private List<String> getCurrentActionIds() {
-        return currentActions != null ? CollectionUtils.mapList(currentActions, actionTicker -> actionTicker.actionInstance.getId()) : Empty.list();
+        return currentActions != null ? CollectionUtils.mapList(currentActions, actionTicker -> actionTicker.bakedAction.getId()) : Empty.list();
     }
 
     public static class ActionTicker {
-        private final ActionInstance<?, ?> actionInstance;
-        private int lastAnimationCycleIndex = 0;
+        private final BakedAction<?> bakedAction;
+        private long lastAnimationCycleIndex = 0;
 
-        public ActionTicker(ActionInstance<?, ?> actionInstance) {
-            this.actionInstance = actionInstance;
+        public ActionTicker(BakedAction<?> bakedAction) {
+            this.bakedAction = bakedAction;
         }
 
         @SuppressWarnings({"rawtypes", "unchecked"})
         public void onUpdate(AnimationTicker ticker, AnimatedObject<?> owner, long clockTime) {
-            AnimationUpdateListener listener = actionInstance.getUpdateListener();
-            ActionContext ctx = new ActionContext(ticker, owner, actionInstance.getData(), clockTime, lastAnimationCycleIndex);
-            lastAnimationCycleIndex = listener.onUpdate(ctx);
+            if (!ticker.isLooped()) {
+                // normalize clockTime
+                clockTime = Math.min(ticker.getTimeline().getClockTimeOnFirstBoundary(), clockTime);
+            }
+
+            ActionContext ctx = new ActionContext(ticker, owner, clockTime, lastAnimationCycleIndex);
+            lastAnimationCycleIndex = bakedAction.onUpdate(ctx);
         }
     }
 }

@@ -24,12 +24,14 @@ import net.minecraftforge.common.util.Lazy;
 import org.jetbrains.annotations.NotNull;
 import ru.timeconqueror.timecore.animation.AnimationData;
 import ru.timeconqueror.timecore.animation.AnimationSystem;
+import ru.timeconqueror.timecore.animation.action.BakedActionFactory;
 import ru.timeconqueror.timecore.animation.component.LoopMode;
 import ru.timeconqueror.timecore.animation.entityai.AnimatedRangedAttackGoal;
 import ru.timeconqueror.timecore.animation.predefined.EntityPredefinedAnimations;
 import ru.timeconqueror.timecore.animation.predefined.PredefinedAnimation;
 import ru.timeconqueror.timecore.api.animation.*;
-import ru.timeconqueror.timecore.api.animation.action.Actions;
+import ru.timeconqueror.timecore.api.animation.action.ActionDefinitions;
+import ru.timeconqueror.timecore.api.animation.action.BakedAction;
 
 import java.util.EnumSet;
 
@@ -75,6 +77,24 @@ public class FloroEntity extends Monster implements RangedAttackMob, AnimatedObj
         }
     }
 
+    private static BakedActionFactory<FloroEntity> actionActivate(int animationTime, boolean activate) {
+        return BakedActionFactory.builder(FloroEntity.class)
+                .actionFactory(() -> BakedAction.builder(FloroEntity.class)
+                        .id(activate ? "activate" : "deactivate")
+//                        .appendAction(ActionDefinitions.everyCycleAt(animationTime, (ctx, props) -> {
+//                            ctx.getOwner().isHiding = activate;
+//                        }))
+                        .build())
+                .build();
+    }
+
+//    .actionFactory(() -> BakedAction.builder()
+//                        .id(activate ? "activate" : "deactivate")
+////                        .appendAction(ActionDefinitions.everyCycleAt(animationTime, (ctx, props) -> {
+////                            ctx.getOwner().isHiding = activate;
+////                        }))
+//                        .build())
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -113,10 +133,10 @@ public class FloroEntity extends Monster implements RangedAttackMob, AnimatedObj
         goalSelector.addGoal(3, new FloatGoal(this));//mutex 4
         goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));//mutex 1
 
-        var rangedAttackBundle = AnimationBundle.<FloroEntity, AnimatedRangedAttackGoal.ActionData>builder()
+        var rangedAttackBundle = AnimationBundle.<FloroEntity, AnimatedRangedAttackGoal.ActionProps>builder()
                 .starter(EntityAnimations.floroShoot.starter())
                 .layerName(LAYER_ATTACK)
-                .action("SHOOT", Actions.everyCycleAtPercents(0.5F, AnimatedRangedAttackGoal.STANDARD_RUNNER))
+                .action("SHOOT", ActionDefinitions.everyCycleAtPercents(0.5F, AnimatedRangedAttackGoal::redirectToPerformRangedAttack))
                 .build();
 
         goalSelector.addGoal(5, new AnimatedRangedAttackGoal<>(this, rangedAttackBundle, 1.0F, 16.0F));//mutex 3
@@ -235,7 +255,7 @@ public class FloroEntity extends Monster implements RangedAttackMob, AnimatedObj
             animationSystem().startAnimation(AnimationBundle.<FloroEntity, Void>builder()
                             .starter(REVEALING_ACTION_STARTER.get())
                             .layerName(LAYER_SHOWING)
-                            .action("REVEAL", Actions.onBoundaryEnd((floroEntity, data) -> floroEntity.setHidden(false)))
+                            .action("REVEAL", ActionDefinitions.onBoundaryEnd((ctx, props) -> ctx.getOwner().setHidden(false)))
                             .build(),
                     null);
         }
@@ -279,7 +299,7 @@ public class FloroEntity extends Monster implements RangedAttackMob, AnimatedObj
             animationSystem().startAnimation(AnimationBundle.<FloroEntity, Void>builder()
                             .starter(EntityAnimations.floroReveal.starter().reversed().withLoopMode(LoopMode.HOLD_ON_LAST_FRAME))
                             .layerName(LAYER_SHOWING)
-                            .action("HIDE", Actions.onBoundaryEnd((floroEntity, data) -> floroEntity.setHidden(true)))
+                            .action("HIDE", ActionDefinitions.onBoundaryEnd((ctx, props) -> ctx.getOwner().setHidden(true)))
                             .build(),
                     null);
         }

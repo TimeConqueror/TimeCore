@@ -46,7 +46,7 @@ public class TransitionTicker extends AbstractAnimationTicker {
     public void update(AnimationController animationController, long clockTime) {
         if (getAnimationTimeAt(clockTime) < getAnimationLength()) return;
 
-        animationController.setCurrentTicker(destination);
+        animationController.setCurrentTicker(destination, clockTime);
     }
 
     @Override

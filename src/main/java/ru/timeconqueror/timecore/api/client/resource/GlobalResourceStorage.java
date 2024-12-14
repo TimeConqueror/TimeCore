@@ -9,11 +9,11 @@ import ru.timeconqueror.timecore.api.Markers;
 import ru.timeconqueror.timecore.storage.LoadingOnlyStorage;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public enum GlobalResourceStorage {
     INSTANCE;
@@ -23,16 +23,16 @@ public enum GlobalResourceStorage {
 
     public void setup(String modId) {
         if (domains.add(modId)) {
-            TimeCore.LOGGER.debug(Markers.RESOURCE_SYSTEM, "Domain {} was added to the resource holder.", modId);
+            TimeCore.LOGGER.debug(Markers.RESOURCES, "Domain {} was added to the resource holder.", modId);
         }
     }
 
     public void fill(Iterable<TimeResourceHolder> holders) {
         holders.forEach(holder -> holder.getResources().forEach((location, resource) -> {
             if (resources.put(location, resource.toBytes()) == null) {
-                TimeCore.LOGGER.debug(Markers.RESOURCE_SYSTEM, "Added new resource with location: {}. Content: {}", location, resource.toString());
+                TimeCore.LOGGER.debug(Markers.RESOURCES, "Added new resource with location: {}. Content: {}", location, resource.toString());
             } else {
-                TimeCore.LOGGER.debug(Markers.RESOURCE_SYSTEM, "Overridden resource with location: {}. New content: {}", location, resource.toString());
+                TimeCore.LOGGER.debug(Markers.RESOURCES, "Overridden resource with location: {}. New content: {}", location, resource.toString());
             }
         }));
     }

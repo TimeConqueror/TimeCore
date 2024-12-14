@@ -2,8 +2,8 @@ package ru.timeconqueror.timecore.api.animation;
 
 import lombok.Getter;
 import ru.timeconqueror.timecore.animation.AnimationSystem;
-import ru.timeconqueror.timecore.animation.action.ActionFactory;
 import ru.timeconqueror.timecore.animation.action.AnimationEventListener;
+import ru.timeconqueror.timecore.animation.action.BakedActionFactory;
 import ru.timeconqueror.timecore.animation.action.PredefinedActionManagerImpl;
 import ru.timeconqueror.timecore.animation.clock.TickBasedClock;
 import ru.timeconqueror.timecore.animation.network.NetworkDispatcherInstance;
@@ -83,8 +83,8 @@ public class AnimationSystemImpl<T extends AnimatedObject<T>> implements Animati
         getAnimationManager().getLayer(layerName).removeAnimationEventListener(listener);
     }
 
-    public <DATA> void registerPredefinedAction(String id, ActionFactory<T, DATA> actionFactory) {
-        getPredefinedActionManagerImpl().register(id, actionFactory);
+    public void registerPredefinedAction(String id, BakedActionFactory<T> bakedActionFactory) {
+        getPredefinedActionManagerImpl().register(id, bakedActionFactory);
     }
 
     @Override
