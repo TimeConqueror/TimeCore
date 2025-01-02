@@ -1,6 +1,7 @@
 package ru.timeconqueror.timecore.animation.watcher;
 
 import lombok.Getter;
+import org.jetbrains.annotations.VisibleForTesting;
 import ru.timeconqueror.timecore.api.util.MathUtils;
 import ru.timeconqueror.timecore.api.util.Requirements;
 
@@ -137,11 +138,21 @@ public class Timeline {
         return animationTimeOnCycle >= animationTimeIn;
     }
 
+    public long getCycleIndex(long clockTime, int maxCycleIndex) {
+        long cycleIndex = getCycleIndex(clockTime);
+        if (maxCycleIndex < 0) {
+            return cycleIndex;
+        }
+
+        return Math.min(cycleIndex, maxCycleIndex);
+    }
+
     /**
      * Returns the cycle index, starting from zero. The index is calculated for looped animation, which means
      * that if the animation is non-looped, all indexes higher than zero should be considered as the end of the animation.
      */
-    public long getCycleIndex(long clockTime) {
+    @VisibleForTesting
+    protected long getCycleIndex(long clockTime) {
         long absAnimationTime = getAbsoluteAnimationTime(clockTime);
 
         if (length == 0) {

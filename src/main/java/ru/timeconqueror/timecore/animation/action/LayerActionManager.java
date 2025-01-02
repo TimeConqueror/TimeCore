@@ -90,11 +90,6 @@ public class LayerActionManager implements AnimationEventListener {
 
         @SuppressWarnings({"rawtypes", "unchecked"})
         public void onUpdate(AnimationTicker ticker, AnimatedObject<?> owner, long clockTime) {
-            if (!ticker.isLooped()) {
-                // normalize clockTime
-                clockTime = Math.min(ticker.getTimeline().getClockTimeOnFirstBoundary(), clockTime);
-            }
-
             ActionContext ctx = new ActionContext(ticker, owner, clockTime, lastAnimationCycleIndex);
             lastAnimationCycleIndex = bakedAction.onUpdate(ctx);
         }

@@ -36,7 +36,8 @@ public class BakedActionImpl<T extends AnimatedObject<T>> implements BakedAction
         long lastCycleIndex = ctx.getLastAnimationCycleIndex();
         long clockTime = ctx.getClockTime();
 
-        long currentCycleIndex = timeline.getCycleIndex(clockTime);
+        int maxCycleIndex = !ticker.isLooped() ? 0 : -1;
+        long currentCycleIndex = timeline.getCycleIndex(clockTime, maxCycleIndex);
         if (loggerEnabled) {
             log.debug("Updating baked action: lastCycleIndex: {}, currentCycleIndex: {}", lastCycleIndex, currentCycleIndex);
         }

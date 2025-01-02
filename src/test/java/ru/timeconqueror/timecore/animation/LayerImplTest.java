@@ -45,6 +45,6 @@ public class LayerImplTest {
         AnimationScript animationScript = mock(AnimationScript.class);
         doReturn(data).when(animationScript).getAnimationData();
         basicLayer.startAnimationScript(animationScript, 0);
-        verify(basicLayer).setCurrentTicker(argThat(argument -> argument instanceof AnimationTickerImpl && ((AnimationTickerImpl) argument).getAnimationScript() == animationScript));
+        verify(basicLayer).setCurrentTicker(argThat(argument -> argument instanceof AnimationTickerImpl && ((AnimationTickerImpl) argument).getAnimationScript() == animationScript), anyLong());
     }
 }
