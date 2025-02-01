@@ -12,7 +12,6 @@ import ru.timeconqueror.timecore.api.animation.BlendType;
 import ru.timeconqueror.timecore.api.animation.Layer;
 import ru.timeconqueror.timecore.api.animation.builders.LayerDefinition;
 import ru.timeconqueror.timecore.api.client.render.model.ITimeModel;
-import ru.timeconqueror.timecore.molang.MolangRuntimeProperties;
 import ru.timeconqueror.timecore.molang.TCMolangRuntime;
 
 import java.util.ArrayList;
@@ -59,8 +58,7 @@ public class LayerImpl implements Layer, AnimationController {
         }
     }
 
-    public void apply(ITimeModel model, MolangRuntimeProperties runtimeProperties, long clockTime) {
-        environment.setRuntimeProperties(runtimeProperties);
+    public void apply(ITimeModel model, long clockTime) {
         getCurrentTicker().apply(model, getBlendType(), getWeight(), getEnvironment(), clockTime);
     }
 

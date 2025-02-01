@@ -15,14 +15,14 @@ public interface BakedAction<T extends AnimatedObject<T>> {
     String getId();
 
     /**
-     * @see #builder(Class)
+     * @see #sequencedBuilder(Class)
      */
-    static <T extends AnimatedObject<T>> Builder<T> builder() {
+    static <T extends AnimatedObject<T>> Builder<T> sequencedBuilder() {
         return new Builder<>();
     }
 
-    static <T extends AnimatedObject<T>> Builder<T> builder(/*because Java generics can't get info from nowhere */ Class<T> animatedObject) {
-        return builder();
+    static <T extends AnimatedObject<T>> Builder<T> sequencedBuilder(/*because Java generics can't get info from nowhere */ Class<T> animatedObject) {
+        return sequencedBuilder();
     }
 
     class Builder<T extends AnimatedObject<T>> {
@@ -34,12 +34,12 @@ public interface BakedAction<T extends AnimatedObject<T>> {
             return this;
         }
 
-        public Builder<T> appendAction(ActionDefinition<T, Void> actionDefinition) {
+        public Builder<T> run(ActionDefinition<T, Void> actionDefinition) {
             actions.add(new BakedActionImpl.ActionWithProps<>(actionDefinition, null));
             return this;
         }
 
-        public <PROPS> Builder<T> appendAction(ActionDefinition<T, PROPS> actionDefinition, PROPS props) {
+        public <PROPS> Builder<T> run(ActionDefinition<T, PROPS> actionDefinition, PROPS props) {
             actions.add(new BakedActionImpl.ActionWithProps<>(actionDefinition, props));
             return this;
         }

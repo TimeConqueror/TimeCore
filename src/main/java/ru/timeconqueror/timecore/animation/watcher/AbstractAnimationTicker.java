@@ -1,6 +1,5 @@
 package ru.timeconqueror.timecore.animation.watcher;
 
-import gg.moonflower.molangcompiler.api.MolangEnvironment;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import ru.timeconqueror.timecore.animation.AnimationController;
@@ -10,6 +9,7 @@ import ru.timeconqueror.timecore.api.animation.Animation;
 import ru.timeconqueror.timecore.api.animation.AnimationTicker;
 import ru.timeconqueror.timecore.api.animation.BlendType;
 import ru.timeconqueror.timecore.api.client.render.model.ITimeModel;
+import ru.timeconqueror.timecore.api.molang.TCMolangEnvironment;
 
 @Getter
 @RequiredArgsConstructor
@@ -17,7 +17,7 @@ public abstract class AbstractAnimationTicker implements AnimationTicker {
 
     private final Timeline timeline;
 
-    public abstract void apply(ITimeModel model, BlendType blendType, float outerWeight, MolangEnvironment environment, long systemTime);
+    public abstract void apply(ITimeModel model, BlendType blendType, float outerWeight, TCMolangEnvironment environment, long systemTime);
 
     public static AbstractAnimationTicker fromState(AnimationState state, long clockTime) {
         if (state instanceof AnimationState.EmptyState) {

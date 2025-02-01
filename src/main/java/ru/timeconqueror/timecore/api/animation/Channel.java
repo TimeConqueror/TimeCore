@@ -6,21 +6,12 @@ import net.minecraft.core.Direction;
 import org.joml.Vector3f;
 import ru.timeconqueror.timecore.api.molang.Molang;
 import ru.timeconqueror.timecore.api.util.MathUtils;
-import ru.timeconqueror.timecore.client.render.model.TimeModelPart;
-
-import java.util.function.Function;
 
 @AllArgsConstructor
 public enum Channel {
-    ROTATION(part -> new Vector3f(0, 0, 0)),//TODO getRotation?
-    TRANSLATION(TimeModelPart::getTranslation),
-    SCALE(TimeModelPart::getScale);
-
-    private final Function<TimeModelPart, Vector3f> makeDefaultVector;
-
-    public Vector3f getDefaultVector(TimeModelPart part) {
-        return makeDefaultVector.apply(part);
-    }
+    ROTATION,
+    TRANSLATION,
+    SCALE;
 
     public MolangExpression fromBedrockFormat(Direction.Axis axis, MolangExpression expression) {
         return switch (this) {

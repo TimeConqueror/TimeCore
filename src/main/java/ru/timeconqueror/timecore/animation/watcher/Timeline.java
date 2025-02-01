@@ -122,22 +122,6 @@ public class Timeline {
         }
     }
 
-    public boolean isAnimationTimeReachedOnCurrentCycle(long clockTime, int animationTimeIn) {
-        long cycleIndex = getCycleIndex(clockTime);
-
-        // we need to convert absolute animation time, which reflect neither animationStartTime nor reversed
-        // to the PASSED animation time
-        if (reversed) {
-            animationTimeIn = getCycleAnimationLength(cycleIndex) - animationTimeIn;
-        } else if (cycleIndex == 0) {
-            animationTimeIn = animationTimeIn - animationStartTime;
-        }
-
-        int animationTimeOnCycle = getAnimationTimeOnCycleNonReversed(clockTime);
-
-        return animationTimeOnCycle >= animationTimeIn;
-    }
-
     public long getCycleIndex(long clockTime, int maxCycleIndex) {
         long cycleIndex = getCycleIndex(clockTime);
         if (maxCycleIndex < 0) {
@@ -176,7 +160,22 @@ public class Timeline {
         return passedCycles;
     }
 
-    private int getAnimationTimeOnCycleNonReversed(long clockTime) {
+    public boolean isAnimationTimeReached(long clockTime, int animationTimeIn, long cycleIndex) {
+        // we need to convert absolute animation time, which reflect neither animationStartTime nor reversed
+        // to the PASSED animation time
+        if (reversed) {
+            animationTimeIn = getCycleAnimationLength(cycleIndex) - animationTimeIn;
+        } else if (cycleIndex == 0) {
+            animationTimeIn = animationTimeIn - animationStartTime;
+        }
+
+        int animationTimeOnCycle = getAnimationTimeOnCycleNonReversed(clockTime, cycleIndex);
+
+        return animationTimeOnCycle >= animationTimeIn;
+    }
+
+    @VisibleForTesting
+    protected int getAnimationTimeOnCycleNonReversed(long clockTime, long cycleIndex) {
         if (length == 0) return 0;
 
         long absAnimationTime = getAbsoluteAnimationTime(clockTime);
@@ -185,15 +184,13 @@ public class Timeline {
             return (int) absAnimationTime;
         }
 
-        absAnimationTime = absAnimationTime - getFirstBoundaryAnimationLength();
-
-        // since zero animation time and max animation time in boundary are the same and cannot be attached to a single cycle
-        // all zero animation time are considered as max animation time in previous cycle
-        if (absAnimationTime % length == 0) {
-            return length;
+        if (cycleIndex == 0) {
+            return (int) MathUtils.coerceInRange(absAnimationTime, 0, getFirstBoundaryAnimationLength());
         }
 
-        return (int) (absAnimationTime % length);
+        int cycleAnimationTime = (int) (absAnimationTime - (getFirstBoundaryAnimationLength() + (cycleIndex - 1) * length));
+
+        return MathUtils.coerceInRange(cycleAnimationTime, 0, length);
     }
 
     private long getAbsoluteAnimationTime(long clockTime) {

@@ -79,7 +79,7 @@ public class FloroEntity extends Monster implements RangedAttackMob, AnimatedObj
 
     private static BakedActionFactory<FloroEntity> actionActivate(int animationTime, boolean activate) {
         return BakedActionFactory.builder(FloroEntity.class)
-                .actionFactory(() -> BakedAction.builder(FloroEntity.class)
+                .actionFactory(() -> BakedAction.sequencedBuilder(FloroEntity.class)
                         .id(activate ? "activate" : "deactivate")
 //                        .appendAction(ActionDefinitions.everyCycleAt(animationTime, (ctx, props) -> {
 //                            ctx.getOwner().isHiding = activate;

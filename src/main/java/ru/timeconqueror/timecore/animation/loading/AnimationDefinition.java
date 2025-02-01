@@ -48,8 +48,8 @@ public class AnimationDefinition {
                     String boneName = boneEntryJson.getKey();
                     JsonObject boneJson = GsonHelper.convertToJsonObject(boneEntryJson.getValue(), boneName);
 
-                    AnimationBoneDefinition rawOption = context.deserialize(boneJson, AnimationBoneDefinition.class);
-                    AnimationBone option = rawOption.bake(boneName);
+                    AnimationBoneDefinition boneDefinition = context.deserialize(boneJson, AnimationBoneDefinition.class);
+                    AnimationBone option = boneDefinition.bake(boneName);
                     animationBones.add(option);
                 }
             }

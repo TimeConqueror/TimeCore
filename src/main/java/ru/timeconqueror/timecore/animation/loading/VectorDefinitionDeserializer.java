@@ -43,7 +43,7 @@ public class VectorDefinitionDeserializer implements JsonDeserializer<VectorDefi
             float f = primitive.getAsFloat();
             return new ConstantVectorDefinition(new Vector3f(f, f, f));
         } catch (NumberFormatException nfe) {
-            MolangExpression exp = compiler.compile(primitive.getAsString());
+            MolangExpression exp = compiler.compile(primitive.getAsString().trim());
             return new DynamicVectorDefinition(exp);
         }
     }
@@ -62,7 +62,7 @@ public class VectorDefinitionDeserializer implements JsonDeserializer<VectorDefi
         try {
             return MolangExpression.of(primitive.getAsFloat());
         } catch (NumberFormatException ex) {
-            return compiler.compile(primitive.getAsString());
+            return compiler.compile(primitive.getAsString().trim());
         }
     }
 }

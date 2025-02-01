@@ -1,10 +1,8 @@
 package ru.timeconqueror.timecore.molang;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@AllArgsConstructor
-@Getter
+@Data
 public class MolangRuntimeProperties {
-    private final long clockTime;
+    private int animationTime;
 }

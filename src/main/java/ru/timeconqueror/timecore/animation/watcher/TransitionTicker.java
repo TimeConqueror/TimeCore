@@ -1,6 +1,5 @@
 package ru.timeconqueror.timecore.animation.watcher;
 
-import gg.moonflower.molangcompiler.api.MolangEnvironment;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 import ru.timeconqueror.timecore.animation.AnimationController;
@@ -9,6 +8,7 @@ import ru.timeconqueror.timecore.animation.network.AnimationState;
 import ru.timeconqueror.timecore.api.animation.AnimationScript;
 import ru.timeconqueror.timecore.api.animation.BlendType;
 import ru.timeconqueror.timecore.api.client.render.model.ITimeModel;
+import ru.timeconqueror.timecore.api.molang.TCMolangEnvironment;
 import ru.timeconqueror.timecore.api.util.MathUtils;
 
 public class TransitionTicker extends AbstractAnimationTicker {
@@ -33,7 +33,7 @@ public class TransitionTicker extends AbstractAnimationTicker {
     }
 
     @Override
-    public void apply(ITimeModel model, BlendType blendType, float outerWeight, MolangEnvironment environment, long clockTime) {
+    public void apply(ITimeModel model, BlendType blendType, float outerWeight, TCMolangEnvironment environment, long clockTime) {
         int animationLength = getAnimationLength();
         float transitionProgress = animationLength != 0 ? ((float) getAnimationTimeAt(clockTime)) / animationLength : 1F;
         transitionProgress = MathUtils.coerceInRange(transitionProgress, 0, 1);

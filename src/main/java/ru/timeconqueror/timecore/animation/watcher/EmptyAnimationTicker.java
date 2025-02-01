@@ -1,6 +1,5 @@
 package ru.timeconqueror.timecore.animation.watcher;
 
-import gg.moonflower.molangcompiler.api.MolangEnvironment;
 import ru.timeconqueror.timecore.animation.AnimationController;
 import ru.timeconqueror.timecore.animation.AnimationData;
 import ru.timeconqueror.timecore.animation.AnimationStarterImpl;
@@ -8,6 +7,7 @@ import ru.timeconqueror.timecore.animation.network.AnimationState;
 import ru.timeconqueror.timecore.api.animation.Animation;
 import ru.timeconqueror.timecore.api.animation.BlendType;
 import ru.timeconqueror.timecore.api.client.render.model.ITimeModel;
+import ru.timeconqueror.timecore.api.molang.TCMolangEnvironment;
 
 public class EmptyAnimationTicker extends AbstractAnimationTicker {
     public static final EmptyAnimationTicker INSTANCE = new EmptyAnimationTicker();
@@ -18,7 +18,7 @@ public class EmptyAnimationTicker extends AbstractAnimationTicker {
     }
 
     @Override
-    public void apply(ITimeModel model, BlendType blendType, float outerWeight, MolangEnvironment environment, long systemTime) {
+    public void apply(ITimeModel model, BlendType blendType, float outerWeight, TCMolangEnvironment environment, long systemTime) {
 
     }
 

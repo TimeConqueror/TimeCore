@@ -1,7 +1,5 @@
 package ru.timeconqueror.timecore.animation.watcher;
 
-import gg.moonflower.molangcompiler.api.MolangEnvironment;
-import gg.moonflower.molangcompiler.api.object.MolangLibrary;
 import lombok.Getter;
 import ru.timeconqueror.timecore.animation.AnimationController;
 import ru.timeconqueror.timecore.animation.AnimationData;
@@ -13,12 +11,12 @@ import ru.timeconqueror.timecore.api.animation.AnimationScript;
 import ru.timeconqueror.timecore.api.animation.BlendType;
 import ru.timeconqueror.timecore.api.client.render.model.ITimeModel;
 import ru.timeconqueror.timecore.api.molang.Molang;
+import ru.timeconqueror.timecore.api.molang.TCMolangEnvironment;
 import ru.timeconqueror.timecore.molang.MolangObjects;
 
 @Getter
 public class AnimationTickerImpl extends AbstractAnimationTicker {
     private final AnimationScript animationScript;
-    private final MolangLibrary tickerQuery;
 
     public AnimationTickerImpl(AnimationScript animationScript, long clockTime) {
         super(new Timeline(animationScript.getAnimationData().getAnimationLength(),
@@ -27,7 +25,6 @@ public class AnimationTickerImpl extends AbstractAnimationTicker {
                 clockTime,
                 animationScript.getAnimationData().getStartAnimationTime()));
         this.animationScript = animationScript;
-        this.tickerQuery = MolangObjects.queriesForTicker(this);
     }
 
     public AnimationTickerImpl(AnimationState.ActiveState state, long clockTime) {
@@ -53,13 +50,14 @@ public class AnimationTickerImpl extends AbstractAnimationTicker {
     }
 
     @Override
-    public void apply(ITimeModel model, BlendType blendType, float outerWeight, MolangEnvironment env, long clockTime) {
+    public void apply(ITimeModel model, BlendType blendType, float outerWeight, TCMolangEnvironment env, long clockTime) {
         Animation animation = getAnimationData().getAnimation();
         //TODO custom weight
 
         int animationTime = getTimeline().getAnimationTime(clockTime, isLooped());
 
-        env.loadLibrary(Molang.Query.Domains.ANIMATION, tickerQuery);
+        env.loadLibrary(Molang.Query.Domains.ANIMATION, MolangObjects.TICKER_QUERY_SET);
+        env.getRuntimeProperties().setAnimationTime(animationTime);
         animation.apply(model, blendType, outerWeight, env, animationTime);
         env.unloadLibrary(Molang.Query.Domains.ANIMATION);
     }
